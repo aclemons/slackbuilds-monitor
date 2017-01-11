@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (C) 2016 Andrew Clemons, Wellington, New Zealand
+# Copyright (C) 2016-2017 Andrew Clemons, Wellington, New Zealand
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -47,7 +47,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
 
   if [ "x$PRGNAM" = "xt-prot" ] ; then
     CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump http://www.escape.de/~tolot/mutt/t-prot/downloads/ | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
-  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|rbenv|ruby-build) true ;; *) false ;; esac ; then
+  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|rbenv|rlwrap|ruby-build|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
                    eclim) printf "%s\n" "ervandew" ;;
@@ -56,6 +56,8 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
                    jsawk) printf "%s\n" "micha" ;;
             kitchen-sync) printf "%s\n" "willbryant" ;;
         rbenv|ruby-build) printf "%s\n" "rbenv" ;;
+                  rlwrap) printf "%s\n" "hanslub42" ;;
+                   vtcol) printf "%s\n" "phi-gamma" ;;
                        *) printf "\n" ;;
       esac
     )"
@@ -63,6 +65,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
     RESOURCE="$(
       case $PRGNAM in
         fzf|imapfilter|jsawk|kitchen-sync) printf "%s\n" "tags" ;;
+                                    vtcol) printf "%s\n" "commits" ;;
                                         *) printf "%s\n" "releases" ;;
       esac
     )"
@@ -70,6 +73,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
     FIELD="$(
      case $PRGNAM in
       fzf|imapfilter|jsawk|kitchen-sync) printf "%s\n" "name" ;;
+                                  vtcol) printf "%s\n" "sha" ;;
                                       *) printf "%s\n" "tag_name" ;;
       esac
     )"
@@ -79,6 +83,10 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
     fi
 
     CURRENT="$(curl -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE" | jsawk -n "if (\$_ == 0) out(this.$FIELD)" | sed 's/^v//')"
+
+    if [ "x$PRGNAM" = "xvtcol" ] ; then
+      CURRENT="git$(echo "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
+    fi
   elif [ "x$PRGNAM" = "xrun-one" ] ; then
     CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump https://launchpad.net/run-one/+download | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
   else
