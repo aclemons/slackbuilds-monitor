@@ -45,7 +45,9 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
 
   echo "Checking for updates of $PRGNAM. Currently $VERSION"
 
-  if [ "x$PRGNAM" = "xt-prot" ] ; then
+  if [ "$PRGNAM" = "eclipse-cpp" ] || [ "$PRGNAM" = "eclipse-java" ] || [ "$PRGNAM" = "eclipse-jee" ] ; then
+    CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump https://www.eclipse.org/downloads/eclipse-packages/ | sed '/^Eclipse /!d' | head -n1 | sed 's/^Eclipse .*(\(.*\)) Release.*$/\1/')"
+  elif [ "x$PRGNAM" = "xt-prot" ] ; then
     CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump http://www.escape.de/~tolot/mutt/t-prot/downloads/ | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
   elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|rbenv|rlwrap|ruby-build|vtcol) true ;; *) false ;; esac ; then
     USER="$(
