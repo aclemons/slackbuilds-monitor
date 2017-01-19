@@ -49,7 +49,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
     CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump https://www.eclipse.org/downloads/eclipse-packages/ | sed '/^Eclipse /!d' | head -n1 | sed 's/^Eclipse .*(\(.*\)) Release.*$/\1/')"
   elif [ "x$PRGNAM" = "xt-prot" ] ; then
     CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump http://www.escape.de/~tolot/mutt/t-prot/downloads/ | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
-  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|rbenv|rlwrap|ruby-build|vtcol) true ;; *) false ;; esac ; then
+  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|rbenv|rlwrap|ruby-build|slackroll|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
                    eclim) printf "%s\n" "ervandew" ;;
@@ -59,6 +59,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
             kitchen-sync) printf "%s\n" "willbryant" ;;
         rbenv|ruby-build) printf "%s\n" "rbenv" ;;
                   rlwrap) printf "%s\n" "hanslub42" ;;
+               slackroll) printf "%s\n" "rg3" ;;
                    vtcol) printf "%s\n" "phi-gamma" ;;
                        *) printf "\n" ;;
       esac
