@@ -19,6 +19,10 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+w3m_fetch() {
+  w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump "$1"
+}
+
 set -e
 
 for cmd in w3m git curl jsawk ; do
@@ -46,9 +50,11 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
   echo "Checking for updates of $PRGNAM. Currently $VERSION"
 
   if [ "$PRGNAM" = "eclipse-cpp" ] || [ "$PRGNAM" = "eclipse-java" ] || [ "$PRGNAM" = "eclipse-jee" ] ; then
-    CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump https://www.eclipse.org/downloads/eclipse-packages/ | sed '/^Eclipse /!d' | head -n1 | sed 's/^Eclipse .*(\(.*\)) Release.*$/\1/')"
-  elif [ "x$PRGNAM" = "xt-prot" ] ; then
-    CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump http://www.escape.de/~tolot/mutt/t-prot/downloads/ | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
+    CURRENT="$(w3m_fetch "https://www.eclipse.org/downloads/eclipse-packages/" | sed '/^Eclipse /!d' | head -n1 | sed 's/^Eclipse .*(\(.*\)) Release.*$/\1/')"
+  elif [ "$PRGNAM" = "t-prot" ] ; then
+    CURRENT="$(w3m_fetch "http://www.escape.de/~tolot/mutt/t-prot/downloads/" | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
+  elif [ "$PRGNAM" = "run-one" ] ; then
+    CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
   elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|rbenv|rlwrap|ruby-build|slackroll|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
@@ -90,8 +96,6 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
     if [ "x$PRGNAM" = "xvtcol" ] ; then
       CURRENT="git$(echo "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     fi
-  elif [ "x$PRGNAM" = "xrun-one" ] ; then
-    CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump https://launchpad.net/run-one/+download | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
   else
     >&2 echo "Unknown program $PRGNAM"
     exit 2
