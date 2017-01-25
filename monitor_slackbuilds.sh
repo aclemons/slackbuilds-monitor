@@ -55,7 +55,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
     CURRENT="$(w3m_fetch "http://www.escape.de/~tolot/mutt/t-prot/downloads/" | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
   elif [ "$PRGNAM" = "run-one" ] ; then
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
-  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|rbenv|rlwrap|ruby-build|slackroll|vtcol) true ;; *) false ;; esac ; then
+  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|python-axolotl*|rbenv|rlwrap|ruby-build|slackroll|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
                    eclim) printf "%s\n" "ervandew" ;;
@@ -67,33 +67,42 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
                   rlwrap) printf "%s\n" "hanslub42" ;;
                slackroll) printf "%s\n" "rg3" ;;
                    vtcol) printf "%s\n" "phi-gamma" ;;
+         python-axolotl*) printf "%s\n" "tgalal" ;;
                        *) printf "\n" ;;
       esac
     )"
 
     RESOURCE="$(
       case $PRGNAM in
-        fzf|imapfilter|jsawk|kitchen-sync) printf "%s\n" "tags" ;;
-                                    vtcol) printf "%s\n" "commits" ;;
-                                        *) printf "%s\n" "releases" ;;
+       fzf|imapfilter|jsawk|kitchen-sync|vtcol|python-axolotl) printf "%s\n" "tags" ;;
+                                    python-axolotl-curve25519) printf "%s\n" "commits" ;;
+                                                            *) printf "%s\n" "releases" ;;
       esac
     )"
 
     FIELD="$(
      case $PRGNAM in
-      fzf|imapfilter|jsawk|kitchen-sync) printf "%s\n" "name" ;;
-                                  vtcol) printf "%s\n" "sha" ;;
-                                      *) printf "%s\n" "tag_name" ;;
+      fzf|imapfilter|jsawk|kitchen-sync|vtcol|python-axolotl) printf "%s\n" "name" ;;
+                                   python-axolotl-curve25519) printf "%s\n" "sha" ;;
+                                                           *) printf "%s\n" "tag_name" ;;
       esac
     )"
 
-    if [ "x$PRGNAM" = "xkitchen-sync" ] ; then
+    if [ "$PRGNAM" = "kitchen-sync" ] ; then
       PRGNAM="$(printf "%s\n" "$PRGNAM" | tr '-' '_')"
     fi
 
-    CURRENT="$(curl -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE" | jsawk -n "if (\$_ == 0) out(this.$FIELD)" | sed 's/^v//')"
+    JSON="$(curl -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE")"
 
-    if [ "x$PRGNAM" = "xvtcol" ] ; then
+    if [ "$PRGNAM" = "python-axolotl" ] ; then
+      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.1.6") return null')"
+    elif [ "$PRGNAM" = "ruby-build" ] ; then
+      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.tag_name === "v20161225") return null')"
+    fi
+
+    CURRENT="$(printf '%s\n' "$JSON" | jsawk -n "if (\$_ == 0) out(this.$FIELD)" | sed 's/^v//')"
+
+    if [ "$PRGNAM" = "python-axolotl-curve25519" ] ; then
       CURRENT="git$(echo "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     fi
   else
