@@ -92,7 +92,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
     if [ "$PRGNAM" = "kitchen-sync" ] ; then
       PRGNAM="$(printf "%s\n" "$PRGNAM" | tr '-' '_')"
     elif [ "$PRGNAM" = "svn-all-fast-export" ] ; then
-        PRGNAM="svn2git"
+      PRGNAM="svn2git"
     fi
 
     JSON="$(curl --user "aclemons:$(pass github)" -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE")"
