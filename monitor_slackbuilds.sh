@@ -55,36 +55,36 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
     CURRENT="$(w3m_fetch "http://www.escape.de/~tolot/mutt/t-prot/downloads/" | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
   elif [ "$PRGNAM" = "run-one" ] ; then
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
-  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|python-axolotl*|rbenv|rlwrap|ruby-build|slackroll|vtcol) true ;; *) false ;; esac ; then
+  elif [ "$PRGNAM" = "python-axolotl-curve25519" ] ; then
+    CURRENT="$(curl -s -H "Accept: application/json" "https://pypi.python.org/pypi/python-axolotl-curve25519/json" | jsawk "return Object.keys(this.releases)[0]")"
+  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|python-axolotl|rbenv|rlwrap|ruby-build|slackroll|verm|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
                    eclim) printf "%s\n" "ervandew" ;;
                      fzf) printf "%s\n" "junegunn" ;;
               imapfilter) printf "%s\n" "lefcha" ;;
                    jsawk) printf "%s\n" "micha" ;;
-            kitchen-sync) printf "%s\n" "willbryant" ;;
+       kitchen-sync|verm) printf "%s\n" "willbryant" ;;
         rbenv|ruby-build) printf "%s\n" "rbenv" ;;
                   rlwrap) printf "%s\n" "hanslub42" ;;
                slackroll) printf "%s\n" "rg3" ;;
                    vtcol) printf "%s\n" "phi-gamma" ;;
-         python-axolotl*) printf "%s\n" "tgalal" ;;
+         python-axolotl) printf "%s\n" "tgalal" ;;
                        *) printf "\n" ;;
       esac
     )"
 
     RESOURCE="$(
       case $PRGNAM in
-       fzf|imapfilter|jsawk|kitchen-sync|vtcol|python-axolotl) printf "%s\n" "tags" ;;
-                                    python-axolotl-curve25519) printf "%s\n" "commits" ;;
-                                                            *) printf "%s\n" "releases" ;;
+        fzf|imapfilter|jsawk|kitchen-sync|vtcol|python-axolotl|verm) printf "%s\n" "tags" ;;
+                                                                  *) printf "%s\n" "releases" ;;
       esac
     )"
 
     FIELD="$(
      case $PRGNAM in
-      fzf|imapfilter|jsawk|kitchen-sync|vtcol|python-axolotl) printf "%s\n" "name" ;;
-                                   python-axolotl-curve25519) printf "%s\n" "sha" ;;
-                                                           *) printf "%s\n" "tag_name" ;;
+       fzf|imapfilter|jsawk|kitchen-sync|vtcol|python-axolotl|verm) printf "%s\n" "name" ;;
+                                                                 *) printf "%s\n" "tag_name" ;;
       esac
     )"
 
@@ -92,18 +92,20 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
       PRGNAM="$(printf "%s\n" "$PRGNAM" | tr '-' '_')"
     fi
 
-    JSON="$(curl -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE")"
+    JSON="$(curl --user "aclemons:$(pass github)" -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE")"
 
     if [ "$PRGNAM" = "python-axolotl" ] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.1.6") return null')"
-    elif [ "$PRGNAM" = "ruby-build" ] ; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.tag_name === "v20161225") return null')"
+    fi
+
+    if [ "$PRGNAM" = "verm" ] ; then
+      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 5) === "test.") return null')"
     fi
 
     CURRENT="$(printf '%s\n' "$JSON" | jsawk -n "if (\$_ == 0) out(this.$FIELD)" | sed 's/^v//')"
 
-    if [ "$PRGNAM" = "python-axolotl-curve25519" ] ; then
-      CURRENT="git$(echo "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
+    if [ "$PRGNAM" = "slackroll" ] ; then
+      CURRENT="v$CURRENT"
     fi
   else
     >&2 echo "Unknown program $PRGNAM"
