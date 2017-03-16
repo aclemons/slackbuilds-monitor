@@ -51,13 +51,15 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
 
   if [ "$PRGNAM" = "eclipse-cpp" ] || [ "$PRGNAM" = "eclipse-java" ] || [ "$PRGNAM" = "eclipse-jee" ] ; then
     CURRENT="$(w3m_fetch "https://www.eclipse.org/downloads/eclipse-packages/" | sed '/^Eclipse /!d' | head -n1 | sed 's/^Eclipse .*(\(.*\)) Release.*$/\1/')"
+  elif [ "$PRGNAM" = "emailrelay" ] ; then
+    CURRENT="$(w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump "https://sourceforge.net/projects/emailrelay/files/emailrelay/" | sed -n '/^      Name/,$p' | sed -n '3p' | sed 's/^[[:space:]]*//' | sed 's/\([^ ]*\).*$/\1/')"
   elif [ "$PRGNAM" = "t-prot" ] ; then
     CURRENT="$(w3m_fetch "http://www.escape.de/~tolot/mutt/t-prot/downloads/" | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
   elif [ "$PRGNAM" = "run-one" ] ; then
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
   elif [ "$PRGNAM" = "python-axolotl-curve25519" ] ; then
     CURRENT="$(curl -s -H "Accept: application/json" "https://pypi.python.org/pypi/python-axolotl-curve25519/json" | jsawk "return Object.keys(this.releases)[0]")"
-  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|python-axolotl|rbenv|rlwrap|ruby-build|slackroll|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
+  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|noto-emoji|python-axolotl|python-fonttools|qtpass|rbenv|rlwrap|ruby-build|slackroll|sslscan|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
                    eclim) printf "%s\n" "ervandew" ;;
@@ -65,37 +67,47 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
               imapfilter) printf "%s\n" "lefcha" ;;
                    jsawk) printf "%s\n" "micha" ;;
        kitchen-sync|verm) printf "%s\n" "willbryant" ;;
+              noto-emoji) printf "%s\n" "googlei18n" ;;
+          python-axolotl) printf "%s\n" "tgalal" ;;
+        python-fonttools) printf "%s\n" "fonttools" ;;
+                  qtpass) printf "%s\n" "IJHack" ;;
         rbenv|ruby-build) printf "%s\n" "rbenv" ;;
                   rlwrap) printf "%s\n" "hanslub42" ;;
                slackroll) printf "%s\n" "rg3" ;;
-                   vtcol) printf "%s\n" "phi-gamma" ;;
-          python-axolotl) printf "%s\n" "tgalal" ;;
+                 sslscan) printf "%s\n" "rbsec" ;;
      svn-all-fast-export) printf "%s\n" "svn-all-fast-export" ;;
+                   vtcol) printf "%s\n" "phi-gamma" ;;
                        *) printf "\n" ;;
       esac
     )"
 
     RESOURCE="$(
       case $PRGNAM in
-        fzf|imapfilter|jsawk|kitchen-sync|python-axolotl|svn-all-fast-export|verm|vtcol) printf "%s\n" "tags" ;;
-                                                                                      *) printf "%s\n" "releases" ;;
+        fzf|imapfilter|jsawk|kitchen-sync|python-axolotl|qtpass|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "tags" ;;
+                                                                                            noto-emoji) printf "%s\n" "commits" ;;
+                                                                                                     *) printf "%s\n" "releases" ;;
       esac
     )"
 
     FIELD="$(
-     case $PRGNAM in
-       fzf|imapfilter|jsawk|kitchen-sync|python-axolotl|svn-all-fast-export|verm|vtcol) printf "%s\n" "name" ;;
-                                                                                     *) printf "%s\n" "tag_name" ;;
+      case $PRGNAM in
+        fzf|imapfilter|jsawk|kitchen-sync|python-axolotl|qtpass|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "name" ;;
+                                                                                            noto-emoji) printf "%s\n" "sha" ;;
+                                                                                                     *) printf "%s\n" "tag_name" ;;
       esac
     )"
 
     if [ "$PRGNAM" = "kitchen-sync" ] ; then
       PRGNAM="$(printf "%s\n" "$PRGNAM" | tr '-' '_')"
+    elif [ "$PRGNAM" = "python-fonttools" ] ; then
+      PRGNAM="fonttools"
     elif [ "$PRGNAM" = "svn-all-fast-export" ] ; then
       PRGNAM="svn2git"
+    elif [ "$PRGNAM" = "python-fonttools" ] ; then
+      PRGNAM="$(printf "%s\n" "$PRGNAM" | tr '[qp]' '[QP]')"
     fi
 
-    JSON="$(curl --user "aclemons:$(pass github)" -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE")"
+    JSON="$(curl -f --user "aclemons:$(pass github | head -1)" -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE")"
 
     if [ "$PRGNAM" = "python-axolotl" ] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.1.6") return null')"
@@ -109,6 +121,12 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
 
     if [ "$PRGNAM" = "slackroll" ] ; then
       CURRENT="v$CURRENT"
+    elif [ "$PRGNAM" = "noto-emoji" ] ; then
+      CURRENT="git$(echo "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
+    fi
+
+    if [ "$PRGNAM" = "sslscan" ] ; then
+      CURRENT="$(printf '%s\n' "$CURRENT" | tr - _)"
     fi
   else
     >&2 echo "Unknown program $PRGNAM"
