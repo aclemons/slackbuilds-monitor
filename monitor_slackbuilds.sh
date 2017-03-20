@@ -59,7 +59,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
   elif [ "$PRGNAM" = "python-axolotl-curve25519" ] ; then
     CURRENT="$(curl -s -H "Accept: application/json" "https://pypi.python.org/pypi/python-axolotl-curve25519/json" | jsawk "return Object.keys(this.releases)[0]")"
-  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|noto-emoji|python-axolotl|python-fonttools|qtpass|rbenv|rlwrap|ruby-build|slackroll|sslscan|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
+  elif case $PRGNAM in eclim|fzf|imapfilter|jsawk|kitchen-sync|noto-emoji|python-axolotl|python-fonttools|python-unicodedata2|qtpass|rbenv|rlwrap|ruby-build|slackroll|sslscan|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
                    eclim) printf "%s\n" "ervandew" ;;
@@ -70,6 +70,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
               noto-emoji) printf "%s\n" "googlei18n" ;;
           python-axolotl) printf "%s\n" "tgalal" ;;
         python-fonttools) printf "%s\n" "fonttools" ;;
+     python-unicodedata2) printf "%s\n" "mikekap" ;;
                   qtpass) printf "%s\n" "IJHack" ;;
         rbenv|ruby-build) printf "%s\n" "rbenv" ;;
                   rlwrap) printf "%s\n" "hanslub42" ;;
@@ -99,8 +100,8 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
 
     if [ "$PRGNAM" = "kitchen-sync" ] ; then
       PRGNAM="$(printf "%s\n" "$PRGNAM" | tr '-' '_')"
-    elif [ "$PRGNAM" = "python-fonttools" ] ; then
-      PRGNAM="fonttools"
+    elif [ "$PRGNAM" = "python-fonttools" ] || [ "$PRGNAM" = "python-unicodedata2" ] ; then
+      PRGNAM="$(printf "%s\n" "$PRGNAM" | sed 's/^python-//' )"
     elif [ "$PRGNAM" = "svn-all-fast-export" ] ; then
       PRGNAM="svn2git"
     elif [ "$PRGNAM" = "python-fonttools" ] ; then
@@ -125,7 +126,7 @@ find . -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /
       CURRENT="git$(echo "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     fi
 
-    if [ "$PRGNAM" = "sslscan" ] ; then
+    if [ "$PRGNAM" = "sslscan" ] || [ "$PRGNAM" = "unicodedata2" ] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | tr - _)"
     fi
   else
