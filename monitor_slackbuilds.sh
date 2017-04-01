@@ -159,7 +159,7 @@ done
     elif [ "$PRGNAM" = "cargo" ] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.0.1-pre" || this.name === "homu-tmp") return null')"
     elif [ "$PRGNAM" = "groovy" ] ; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.indexOf("ALPHA") >= 1) return null')"
+      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.indexOf("ALPHA") >= 0) return null')"
     elif [ "$PRGNAM" = "rust" ] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 8) === "release-") return null')"
     elif [ "$PRGNAM" = "verm" ] ; then
