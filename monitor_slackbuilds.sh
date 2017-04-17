@@ -98,7 +98,7 @@ done
     CURRENT="0.10.r$(w3m_fetch "$CURRENT" | sed -n '/^changeset /p' | sed 's/^changeset \(.*\)$/\1/')"
   elif [ "$PRGNAM" = "run-one" ] ; then
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
-  elif case $PRGNAM in cargo|cargo-vendor|eclim|fzf|gajim|groovy|imapfilter|jsawk|kitchen-sync|noto-emoji|python-axolotl|python-fonttools|python-unicodedata2|qtpass|rbenv|rlwrap|ruby-build|rust|slackroll|sslscan|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
+  elif case $PRGNAM in cargo|cargo-vendor|eclim|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|noto-emoji|python-axolotl|python-fonttools|python-unicodedata2|qtpass|rbenv|rlwrap|ruby-build|rust|slackroll|sslscan|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
                    cargo) printf "%s\n" "rust-lang" ;;
@@ -106,6 +106,7 @@ done
                    eclim) printf "%s\n" "ervandew" ;;
                      fzf) printf "%s\n" "junegunn" ;;
                    gajim) printf "%s\n" "gajim" ;;
+      haskell-ShellCheck) printf "%s\n" "koalaman" ;;
                   groovy) printf "%s\n" "apache" ;;
               imapfilter) printf "%s\n" "lefcha" ;;
                    jsawk) printf "%s\n" "micha" ;;
@@ -128,21 +129,23 @@ done
 
     RESOURCE="$(
       case $PRGNAM in
-        cargo|cargo-vendor|fzf|gajim|groovy|imapfilter|jsawk|kitchen-sync|python-axolotl|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "tags" ;;
-                                                                                                                                 noto-emoji) printf "%s\n" "commits" ;;
-                                                                                                                                          *) printf "%s\n" "releases" ;;
+        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|python-axolotl|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "tags" ;;
+                                                                                                                                                    noto-emoji) printf "%s\n" "commits" ;;
+                                                                                                                                                             *) printf "%s\n" "releases" ;;
       esac
     )"
 
     FIELD="$(
       case $PRGNAM in
-        cargo|cargo-vendor|fzf|gajim|groovy|imapfilter|jsawk|kitchen-sync|python-axolotl|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "name" ;;
-                                                                                                                                 noto-emoji) printf "%s\n" "sha" ;;
-                                                                                                                                          *) printf "%s\n" "tag_name" ;;
+        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|python-axolotl|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "name" ;;
+                                                                                                                                                    noto-emoji) printf "%s\n" "sha" ;;
+                                                                                                                                                             *) printf "%s\n" "tag_name" ;;
       esac
     )"
 
-    if [ "$PRGNAM" = "kitchen-sync" ] ; then
+    if [ "$PRGNAM" = "haskell-ShellCheck" ] ; then
+      PRGNAM="$(printf "%s\n" "$PRGNAM" | cut -d- -f2 | tr '[:upper:]' '[:lower:]')"
+    elif [ "$PRGNAM" = "kitchen-sync" ] ; then
       PRGNAM="$(printf "%s\n" "$PRGNAM" | tr '-' '_')"
     elif [ "$PRGNAM" = "python-fonttools" ] || [ "$PRGNAM" = "python-unicodedata2" ] ; then
       PRGNAM="$(printf "%s\n" "$PRGNAM" | sed 's/^python-//' )"
@@ -171,8 +174,11 @@ done
     if [ "$PRGNAM" = "slackroll" ] ; then
       CURRENT="v$CURRENT"
     elif [ "$PRGNAM" = "noto-emoji" ] ; then
+      # shellcheck disable=SC2001
       CURRENT="git$(echo "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
-    elif [ "$PRGNAM" = "sslscan" ] || [ "$PRGNAM" = "unicodedata2" ] ; then
+    elif [ "$PRGNAM" = "sslscan" ] ; then
+      CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/-rbsec$//')"
+    elif [ "$PRGNAM" = "unicodedata2" ] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | tr - _)"
     elif [ "$PRGNAM" = "gajim" ] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^gajim-//')"
