@@ -161,6 +161,8 @@ done
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.1.6") return null')"
     elif [ "$PRGNAM" = "cargo" ] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.0.1-pre" || this.name === "homu-tmp") return null')"
+    elif [ "$PRGNAM" = "cargo-vendor" ] ; then
+      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "test-tag9") return null')"
     elif [ "$PRGNAM" = "groovy" ] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.indexOf("ALPHA") >= 0) return null')"
     elif [ "$PRGNAM" = "rust" ] ; then
