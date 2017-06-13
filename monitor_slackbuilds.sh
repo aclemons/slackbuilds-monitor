@@ -52,6 +52,7 @@ done
     find "$HINTS_DIR" -name \*.hint
     find "$SLACKBUILDS_DIR" -name \*.info -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /dev/null" _ {} \; -print
 } | while read -r project ; do
+
   VERSION=
   PRGNAM=
   # shellcheck source=/dev/null
@@ -65,7 +66,7 @@ done
     PRGNAM="$FILENAME"
   fi
 
-  if [ "x$VERSION" = "x" ] || [ "x$PRGNAM" = "xlibqsqlpsql" ]; then
+  if [ "x$VERSION" = "x" ] || [ "x$PRGNAM" = "xlibqsqlpsql" ] || [ "x$PRGNAM" = "xsbt" ] || [ "x$PRGNAM" = "xlibreadline-java" ] ; then
     continue
   fi
 
@@ -79,8 +80,6 @@ done
     CURRENT="$(w3m_fetch "https://www.eclipse.org/downloads/eclipse-packages/" | sed '/^Eclipse /!d' | head -n1 | sed 's/^Eclipse .*(\(.*\)) Release.*$/\1/')"
   elif [ "$PRGNAM" = "dropbear" ] ; then
     CURRENT="$(w3m_fetch "https://matt.ucc.asn.au/dropbear/" | sed -n '/^Release /,$p' | sed -n '1p' | sed 's/^Release \(.*\) is latest\.$/\1/')"
-  elif [ "$PRGNAM" = "dovecot" ] ; then
-    CURRENT="$(w3m_fetch "http://www.dovecot.org/releases/2.2/" | sed -n '/dovecot-2\.2\.[[:digit:]]*\.tar\.gz[[:space:]].*$/p' | sed '$!d' | sed 's/.*dovecot-\(2\.2\.[[:digit:]]*\)\.tar\.gz[[:space:]].*$/\1/')"
   elif [ "$PRGNAM" = "postgrey" ] ; then
     CURRENT="$(w3m_fetch "http://postgrey.schweikert.ch/pub/" | sed -n '/postgrey-/p' | sed '$d' | sed '$!d' | sed 's/^.*postgrey-\(.*\)\.tar\.gz.*$/\1/')"
   elif [ "$PRGNAM" = "emailrelay" ] ; then
@@ -94,11 +93,11 @@ done
   elif [ "$PRGNAM" = "python-axolotl-curve25519" ] ; then
     CURRENT="$(curl -s -H "Accept: application/json" "https://pypi.python.org/pypi/python-axolotl-curve25519/json" | jsawk "return Object.keys(this.releases)[0]")"
   elif [ "$PRGNAM" = "prosody" ] ; then
-		CURRENT="$(xmllint --xpath "string((//*[local-name()='entry']/*[local-name()='link']//@href)[1])" <(curl -s https://hg.prosody.im/0.10/atom-log) | sed 's/http:/https:/')"
+    CURRENT="$(xmllint --xpath "string((//*[local-name()='entry']/*[local-name()='link']//@href)[1])" <(curl -s https://hg.prosody.im/0.10/atom-log) | sed 's/http:/https:/')"
     CURRENT="0.10.r$(w3m_fetch "$CURRENT" | sed -n '/^changeset /p' | sed 's/^changeset \(.*\)$/\1/')"
   elif [ "$PRGNAM" = "run-one" ] ; then
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
-  elif case $PRGNAM in cargo|cargo-vendor|eclim|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|noto-emoji|python-axolotl|python-fonttools|python-unicodedata2|qtpass|rbenv|rlwrap|ruby-build|rust|slackroll|sslscan|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
+  elif case $PRGNAM in cargo|cargo-vendor|eclim|fzf|gajim|git-fame|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|noto-emoji|python-axolotl|python-fonttools|python-nbxmpp|python-unicodedata2|qtpass|rbenv|rlwrap|ruby-build|rust|slackroll|sslscan|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
                    cargo) printf "%s\n" "rust-lang" ;;
@@ -106,14 +105,16 @@ done
                    eclim) printf "%s\n" "ervandew" ;;
                      fzf) printf "%s\n" "junegunn" ;;
                    gajim) printf "%s\n" "gajim" ;;
-      haskell-ShellCheck) printf "%s\n" "koalaman" ;;
                   groovy) printf "%s\n" "apache" ;;
+                git-fame) printf "%s\n" "casperdcl" ;;
+      haskell-ShellCheck) printf "%s\n" "koalaman" ;;
               imapfilter) printf "%s\n" "lefcha" ;;
                    jsawk) printf "%s\n" "micha" ;;
        kitchen-sync|verm) printf "%s\n" "willbryant" ;;
               noto-emoji) printf "%s\n" "googlei18n" ;;
           python-axolotl) printf "%s\n" "tgalal" ;;
         python-fonttools) printf "%s\n" "fonttools" ;;
+           python-nbxmpp) printf "%s\n" "gajim" ;;
      python-unicodedata2) printf "%s\n" "mikekap" ;;
                   qtpass) printf "%s\n" "IJHack" ;;
         rbenv|ruby-build) printf "%s\n" "rbenv" ;;
@@ -129,17 +130,17 @@ done
 
     RESOURCE="$(
       case $PRGNAM in
-        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|python-axolotl|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "tags" ;;
-                                                                                                                                                    noto-emoji) printf "%s\n" "commits" ;;
-                                                                                                                                                             *) printf "%s\n" "releases" ;;
+        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|python-axolotl|python-nbxmpp|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "tags" ;;
+                                                                                                                                                                  noto-emoji) printf "%s\n" "commits" ;;
+                                                                                                                                                                           *) printf "%s\n" "releases" ;;
       esac
     )"
 
     FIELD="$(
       case $PRGNAM in
-        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|python-axolotl|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "name" ;;
-                                                                                                                                                    noto-emoji) printf "%s\n" "sha" ;;
-                                                                                                                                                             *) printf "%s\n" "tag_name" ;;
+        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|python-axolotl|python-nbxmpp|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "name" ;;
+                                                                                                                                                                  noto-emoji) printf "%s\n" "sha" ;;
+                                                                                                                                                                           *) printf "%s\n" "tag_name" ;;
       esac
     )"
 
@@ -162,7 +163,7 @@ done
     elif [ "$PRGNAM" = "cargo" ] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.0.1-pre" || this.name === "homu-tmp") return null')"
     elif [ "$PRGNAM" = "cargo-vendor" ] ; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "test-tag9") return null')"
+      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "test-tag9" || this.name === "0.1.9") return null')"
     elif [ "$PRGNAM" = "groovy" ] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.indexOf("ALPHA") >= 0) return null')"
     elif [ "$PRGNAM" = "rust" ] ; then
@@ -184,6 +185,8 @@ done
       CURRENT="$(printf '%s\n' "$CURRENT" | tr - _)"
     elif [ "$PRGNAM" = "gajim" ] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^gajim-//')"
+    elif [ "$PRGNAM" = "python-nbxmpp" ] ; then
+      CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^nbxmpp-//')"
     elif [ "$PRGNAM" = "groovy" ] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | tr _ . | sed 's/^GROOVY\.//')"
     fi
