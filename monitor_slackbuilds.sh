@@ -66,7 +66,7 @@ done
     PRGNAM="$FILENAME"
   fi
 
-  if [ "x$VERSION" = "x" ] || [ "x$PRGNAM" = "xlibqsqlpsql" ] || [ "x$PRGNAM" = "xsbt" ] || [ "x$PRGNAM" = "xlibreadline-java" ] ; then
+  if [ "x$VERSION" = "x" ] || [ "x$PRGNAM" = "xlibqsqlpsql" ] || [ "x$PRGNAM" = "xsbt" ] || [ "x$PRGNAM" = "xhenplus" ] || [ "x$PRGNAM" = "xrustup" ] || [ "x$PRGNAM" = "xmeson" ] ; then
     continue
   fi
 
@@ -97,7 +97,7 @@ done
     CURRENT="0.10.r$(w3m_fetch "$CURRENT" | sed -n '/^changeset /p' | sed 's/^changeset \(.*\)$/\1/')"
   elif [ "$PRGNAM" = "run-one" ] ; then
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
-  elif case $PRGNAM in cargo|cargo-vendor|eclim|fzf|gajim|git-fame|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|noto-emoji|python-axolotl|python-fonttools|python-nbxmpp|python-unicodedata2|qtpass|rbenv|rlwrap|ruby-build|rust|slackroll|sslscan|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
+  elif case $PRGNAM in cargo|cargo-vendor|eclim|fzf|gajim|git-fame|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|libreadline-java|noto-emoji|python-axolotl|python-fonttools|python-nbxmpp|python-unicodedata2|qtpass|rbenv|rlwrap|ruby-build|rust|slackroll|sslscan|svn-all-fast-export|verm|vtcol) true ;; *) false ;; esac ; then
     USER="$(
       case $PRGNAM in
                    cargo) printf "%s\n" "rust-lang" ;;
@@ -111,6 +111,7 @@ done
               imapfilter) printf "%s\n" "lefcha" ;;
                    jsawk) printf "%s\n" "micha" ;;
        kitchen-sync|verm) printf "%s\n" "willbryant" ;;
+        libreadline-java) printf "%s\n" "aclemons" ;;
               noto-emoji) printf "%s\n" "googlei18n" ;;
           python-axolotl) printf "%s\n" "tgalal" ;;
         python-fonttools) printf "%s\n" "fonttools" ;;
@@ -130,7 +131,7 @@ done
 
     RESOURCE="$(
       case $PRGNAM in
-        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|python-axolotl|python-nbxmpp|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "tags" ;;
+        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|libreadline-java|python-axolotl|python-nbxmpp|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "tags" ;;
                                                                                                                                                                   noto-emoji) printf "%s\n" "commits" ;;
                                                                                                                                                                            *) printf "%s\n" "releases" ;;
       esac
@@ -138,7 +139,7 @@ done
 
     FIELD="$(
       case $PRGNAM in
-        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|python-axolotl|python-nbxmpp|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "name" ;;
+        cargo|cargo-vendor|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|kitchen-sync|libreadline-java|python-axolotl|python-nbxmpp|qtpass|rust|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "name" ;;
                                                                                                                                                                   noto-emoji) printf "%s\n" "sha" ;;
                                                                                                                                                                            *) printf "%s\n" "tag_name" ;;
       esac
@@ -148,6 +149,8 @@ done
       PRGNAM="$(printf "%s\n" "$PRGNAM" | cut -d- -f2 | tr '[:upper:]' '[:lower:]')"
     elif [ "$PRGNAM" = "kitchen-sync" ] ; then
       PRGNAM="$(printf "%s\n" "$PRGNAM" | tr '-' '_')"
+    elif [ "$PRGNAM" = "libreadline-java" ] ; then
+      PRGNAM="java-readline"
     elif [ "$PRGNAM" = "python-fonttools" ] || [ "$PRGNAM" = "python-unicodedata2" ] ; then
       PRGNAM="$(printf "%s\n" "$PRGNAM" | sed 's/^python-//' )"
     elif [ "$PRGNAM" = "python-fonttools" ] ; then
