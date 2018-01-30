@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2016-2017 Andrew Clemons, Wellington, New Zealand
+# Copyright (C) 2016-2018 Andrew Clemons, Wellington, New Zealand
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -42,17 +42,10 @@ if [[ -z $MAINTAINER ]] ; then
  exit 1
 fi
 
-for dir in "$SLACKBUILDS_DIR" "$HINTS_DIR" "$MYSLACKBUILDS_DIR" ; do
-  (
-    cd "$dir"
-#    git pull --rebase
-  )
-done
-
 {
+    find "$MYSLACKBUILDS_DIR" -name \*.info -maxdepth 3 -print
     find "$HINTS_DIR" -name \*.hint -maxdepth 3
     find "$SLACKBUILDS_DIR" -name \*.info -maxdepth 3 -exec sh -c "i=\"\$1\"; grep -i \"$MAINTAINER\" \"\$i\" > /dev/null" _ {} \; -print
-    find "$MYSLACKBUILDS_DIR" -name \*.info -maxdepth 3 -print
 } | while read -r project ; do
 
   VERSION=
@@ -64,11 +57,15 @@ done
   EXTENSION="${FILENAME##*.}"
   FILENAME="${FILENAME%.*}"
 
+  if [[ -z $VERSION ]] ; then
+    continue
+  fi
+
   if [[ -z $PRGNAM ]] ; then
     PRGNAM="$FILENAME"
   fi
 
-  if [[ -z $VERSION ]] || [[ $PRGNAM == libqsqlpsql ]] || [[ $PRGNAM == sbt ]] || [[ $PRGNAM == henplus ]] || [[ $PRGNAM == chkboot ]] || [[ $PRGNAM == mssql-server ]] || [[ $PRGNAM == vacation ]] || [[ $PRGNAM == picasa ]] || [[ $PRGNAM == qemu ]] || [[ $PRGNAM == jenkins ]] ; then
+  if [[ $PRGNAM == henplus ]] || [[ $PRGNAM == chkboot ]] || [[ $PRGNAM == mssql-server ]] || [[ $PRGNAM == vacation ]] || [[ $PRGNAM == picasa ]] || [[ $PRGNAM == vuescan ]] ; then
     continue
   fi
 
@@ -105,85 +102,93 @@ done
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
   elif [[ $PRGNAM == rubber ]]; then
     CURRENT="$(w3m_fetch "https://launchpad.net/rubber/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
+  elif [[ $PRGNAM == jenkins ]]; then
+    CURRENT="$(w3m_fetch "http://mirrors.jenkins.io/war-stable/" | grep DIR | sed '$d' | sed '/PARENTDIR/d' | sed 's/^\[DIR\][[:space:]]*//;s/^\([^[:space:]]*\)[[:space:]][[:space:]]*.*$/\1/;s/\/$//' | sort -V -r | head -1)"
+  elif [[ $PRGNAM == iscan ]]; then
+    CURRENT="$(w3m_fetch 'http://support.epson.net/linux/src/scanner/iscan/' | grep iscan_ | sed 's/•//' | sort -r -V | head -1 | sed 's/^[^_]*_\(.*\).tar.gz/\1/' | tr - _)"
+  elif [[ $PRGNAM == iscan-data ]]; then
+    CURRENT="$(w3m_fetch 'http://support.epson.net/linux/src/scanner/iscan/' | grep iscan-data | sed 's/•//' | sort -r -V | head -1 | sed 's/^[^_]*_\(.*\).tar.gz/\1/' | tr - _)"
+  elif [[ $PRGNAM == iscan-plugin-gt-x770 ]] ; then
+    CURRENT="$(w3m_fetch 'https://dev.gentoo.org/~flameeyes/avasys/' | grep gt-x770 | grep x86 | sed 's/^.*iscan-plugin-gt-x770-\(.*\)\.x86.*$/\1/' | tr - _)"
   else
     USER="$(
       case $PRGNAM in
-               alacritty) printf "%s\n" "jwilm" ;;
-          appstream-glib) printf "%s\n" "hughsie" ;;
-            cargo-vendor) printf "%s\n" "alexcrichton" ;;
-                   eclim) printf "%s\n" "ervandew" ;;
-                  efivar) printf "%s\n" "rhboot" ;;
-                     exa) printf "%s\n" "ogham" ;;
-                      fd) printf "%s\n" "sharkdp" ;;
-                   fwupd) printf "%s\n" "hughsie" ;;
-                fwupdate) printf "%s\n" "rhboot" ;;
-                     fzf) printf "%s\n" "junegunn" ;;
-                   gajim) printf "%s\n" "gajim" ;;
-                  groovy) printf "%s\n" "apache" ;;
-                git-fame) printf "%s\n" "casperdcl" ;;
-      haskell-ShellCheck) printf "%s\n" "koalaman" ;;
-              imapfilter) printf "%s\n" "lefcha" ;;
-                   jsawk) printf "%s\n" "micha" ;;
-             json-parser) printf "%s\n" "udp" ;;
-              kde1-*|qt1) printf "%s\n" "KDE" ;;
-       kitchen-sync|verm) printf "%s\n" "willbryant" ;;
-        libreadline-java) printf "%s\n" "aclemons" ;;
-                  mrustc) printf "%s\n" "thepowersgang" ;;
-            node-xoauth2) printf "%s\n" "andris9" ;;
-              noto-emoji) printf "%s\n" "googlei18n" ;;
-          python-axolotl) printf "%s\n" "tgalal" ;;
-        python-fonttools) printf "%s\n" "fonttools" ;;
-           python-nbxmpp) printf "%s\n" "gajim" ;;
-     python-unicodedata2) printf "%s\n" "mikekap" ;;
-                  qtpass) printf "%s\n" "IJHack" ;;
-                   racer) printf "%s\n" "racer-rust" ;;
-        rbenv|ruby-build) printf "%s\n" "rbenv" ;;
-                  remacs) printf "%s\n" "Wilfred" ;;
-                 ripgrep) printf "%s\n" "BurntSushi" ;;
-                  rlwrap) printf "%s\n" "hanslub42" ;;
-               rtl8192eu) printf "%s\n" "Mange" ;;
-                    rust) printf "%s\n" "rust-lang" ;;
-                 rustfmt) printf "%s\n" "rust-lang-nursery" ;;
-                  rustup) printf "%s\n" "rust-lang-nursery" ;;
-               slackroll) printf "%s\n" "rg3" ;;
-              slack-term) printf "%s\n" "jvalduvieco" ;;
-         slack-libpurple) printf "%s\n" "dylex" ;;
-                 sslscan) printf "%s\n" "rbsec" ;;
-     svn-all-fast-export) printf "%s\n" "svn-all-fast-export" ;;
-            ttf-mononoki) printf "%s\n" "madmalik" ;;
-                   vtcol) printf "%s\n" "phi-gamma" ;;
-                       *) >&2 printf "Unknown program %s\n" "$PRGNAM" && exit 1 ;;
+               alacritty) printf "%s\\n" "jwilm" ;;
+          appstream-glib) printf "%s\\n" "hughsie" ;;
+            cargo-vendor) printf "%s\\n" "alexcrichton" ;;
+                   eclim) printf "%s\\n" "ervandew" ;;
+               early-ssh) printf "%s\\n" "gheja" ;;
+                  efivar) printf "%s\\n" "rhboot" ;;
+                     exa) printf "%s\\n" "ogham" ;;
+                      fd) printf "%s\\n" "sharkdp" ;;
+                   fwupd) printf "%s\\n" "hughsie" ;;
+                fwupdate) printf "%s\\n" "rhboot" ;;
+                     fzf) printf "%s\\n" "junegunn" ;;
+                   gajim) printf "%s\\n" "gajim" ;;
+                  groovy) printf "%s\\n" "apache" ;;
+                git-fame) printf "%s\\n" "casperdcl" ;;
+      haskell-ShellCheck) printf "%s\\n" "koalaman" ;;
+              imapfilter) printf "%s\\n" "lefcha" ;;
+                   jsawk) printf "%s\\n" "micha" ;;
+             json-parser) printf "%s\\n" "udp" ;;
+              kde1-*|qt1) printf "%s\\n" "KDE" ;;
+       kitchen-sync|verm) printf "%s\\n" "willbryant" ;;
+        libreadline-java) printf "%s\\n" "aclemons" ;;
+                  mrustc) printf "%s\\n" "thepowersgang" ;;
+            node-xoauth2) printf "%s\\n" "andris9" ;;
+              noto-emoji) printf "%s\\n" "googlei18n" ;;
+          python-axolotl) printf "%s\\n" "tgalal" ;;
+        python-fonttools) printf "%s\\n" "fonttools" ;;
+           python-nbxmpp) printf "%s\\n" "gajim" ;;
+     python-unicodedata2) printf "%s\\n" "mikekap" ;;
+                  qtpass) printf "%s\\n" "IJHack" ;;
+                   racer) printf "%s\\n" "racer-rust" ;;
+        rbenv|ruby-build) printf "%s\\n" "rbenv" ;;
+                  remacs) printf "%s\\n" "Wilfred" ;;
+                 ripgrep) printf "%s\\n" "BurntSushi" ;;
+                  rlwrap) printf "%s\\n" "hanslub42" ;;
+               rtl8192eu) printf "%s\\n" "Mange" ;;
+                    rust) printf "%s\\n" "rust-lang" ;;
+                  rustup) printf "%s\\n" "rust-lang-nursery" ;;
+               slackroll) printf "%s\\n" "rg3" ;;
+              slack-term) printf "%s\\n" "jvalduvieco" ;;
+         slack-libpurple) printf "%s\\n" "dylex" ;;
+                 sslscan) printf "%s\\n" "rbsec" ;;
+     svn-all-fast-export) printf "%s\\n" "svn-all-fast-export" ;;
+            ttf-mononoki) printf "%s\\n" "madmalik" ;;
+                   vtcol) printf "%s\\n" "phi-gamma" ;;
+                       *) >&2 printf "Unknown program %s\\n" "$PRGNAM" && exit 1 ;;
       esac
     )"
 
     RESOURCE="$(
       case $PRGNAM in
-        appstream-glib|cargo-vendor|efivar|exa|fwupd|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|json-parser|kitchen-sync|libreadline-java|node-xoauth2|noto-emoji|python-axolotl|python-nbxmpp|qtpass|racer|rust|rustup|rustfmt|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "tags" ;;
-                                                                                          alacritty|kde1-*|mrustc|qt1|remacs|rtl8192eu|slack-term|slack-libpurple) printf "%s\n" "commits" ;;
-                                                                                                                                                                           *) printf "%s\n" "releases" ;;
+        appstream-glib|cargo-vendor|efivar|exa|fwupd|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|json-parser|kitchen-sync|libreadline-java|node-xoauth2|noto-emoji|python-axolotl|python-nbxmpp|qtpass|racer|ruby-build|rust|rustup|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\\n" "tags" ;;
+                                                                                           alacritty|early-ssh|kde1-*|mrustc|qt1|remacs|rtl8192eu|slack-term|slack-libpurple) printf "%s\\n" "commits" ;;
+                                                                                                                                                                           *) printf "%s\\n" "releases" ;;
       esac
     )"
 
     FIELD="$(
       case $PRGNAM in
-        appstream-glib|cargo-vendor|efivar|exa|fwupd|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|json-parser|kitchen-sync|libreadline-java|node-xoauth2|noto-emoji|python-axolotl|python-nbxmpp|qtpass|racer|rust|rustfmt|rustup|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\n" "name" ;;
-                                                                                          alacritty|kde1-*|mrustc|qt1|remacs|rtl8192eu|slack-term|slack-libpurple) printf "%s\n" "sha" ;;
-                                                                                                                                                                           *) printf "%s\n" "tag_name" ;;
+        appstream-glib|cargo-vendor|efivar|exa|fwupd|fzf|gajim|groovy|haskell-ShellCheck|imapfilter|jsawk|json-parser|kitchen-sync|libreadline-java|node-xoauth2|noto-emoji|python-axolotl|python-nbxmpp|qtpass|racer|ruby-build|rust|rustup|sslscan|svn-all-fast-export|verm|vtcol) printf "%s\\n" "name" ;;
+                                                                                          alacritty|early-ssh|kde1-*|mrustc|qt1|remacs|rtl8192eu|slack-term|slack-libpurple) printf "%s\\n" "sha" ;;
+                                                                                                                                                                           *) printf "%s\\n" "tag_name" ;;
       esac
     )"
 
     if [[ $PRGNAM == haskell-ShellCheck ]]; then
-      PRGNAM="$(printf "%s\n" "$PRGNAM" | cut -d- -f2 | tr '[:upper:]' '[:lower:]')"
+      PRGNAM="$(printf "%s\\n" "$PRGNAM" | cut -d- -f2 | tr '[:upper:]' '[:lower:]')"
     elif [[ $PRGNAM == kitchen-sync ]]; then
-      PRGNAM="$(printf "%s\n" "$PRGNAM" | tr '-' '_')"
+      PRGNAM="$(printf "%s\\n" "$PRGNAM" | tr '-' '_')"
     elif [[ $PRGNAM == libreadline-java ]]; then
       PRGNAM="java-readline"
     elif [[ $PRGNAM == node-xoauth2 ]]; then
       PRGNAM="xoauth2"
     elif [[ $PRGNAM == python-fonttools ]] || [[ $PRGNAM == python-unicodedata2 ]]; then
-      PRGNAM="$(printf "%s\n" "$PRGNAM" | sed 's/^python-//' )"
+      PRGNAM="$(printf "%s\\n" "$PRGNAM" | sed 's/^python-//' )"
     elif [[ $PRGNAM == python-fonttools ]]; then
-      PRGNAM="$(printf "%s\n" "$PRGNAM" | tr 'qp' 'QP')"
+      PRGNAM="$(printf "%s\\n" "$PRGNAM" | tr 'qp' 'QP')"
     elif [[ $PRGNAM == rtl8192eu ]]; then
       PRGNAM="$PRGNAM-linux-driver"
     elif [[ $PRGNAM == rustup ]]; then
@@ -200,6 +205,8 @@ done
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.0.1-pre" || this.name === "0.10.0" || this.name === "0.9.0" || this.name === "0.8.0" || this.name === "0.7.0" || this.name === "0.6.0" || this.name === "0.5.0" || this.name === "0.4.0" || this.name === "0.3.0" || this.name === "0.2.0") return null')"
     elif [[ $PRGNAM == efivar ]]; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 6) === "efivar" || this.name.substring(0, 7) === "abidiff") return null')"
+    elif [[ $PRGNAM == fwupd ]]; then
+      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 6) === "fwupd_") return null')"
     elif [[ $PRGNAM == gajim ]]; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 13) === "gajim-1.0.0-a") return null')"
     elif [[ $PRGNAM == groovy ]]; then
@@ -212,8 +219,6 @@ done
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 8) === "release-") return null')"
     elif [[ $PRGNAM == racer ]]; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 3) === "v1." || this.name === "phil" || this.name === "old-dev" || this.name.substring(0, 3) === "foo" || this.name === "dev" || this.name === "before" || this.name === "2.07") return null')"
-    elif [[ $PRGNAM == rustfmt ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 8) === "nightly-" || this.name === "v8.1" || this.name.substring(0, 4) == "v0.8" || this.name.substring(0, 4) === "v0.7" || this.name.substring(0, 4) === "v0.6" || this.name.substring(0, 4) === "v0.5" || this.name.substring(0, 4) === "v0.4" || this.name.substring(0, 4) === "v0.3") return null')"
     elif [[ $PRGNAM == verm ]]; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 5) === "test.") return null')"
     fi
@@ -224,23 +229,20 @@ done
       CURRENT="$(echo "$CURRENT" | sed -e 's/^appstream_glib_//' -e 's/_/./g')"
     elif [[ $PRGNAM == groovy ]] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | tr _ . | sed 's/^GROOVY\.//')"
-    elif [[ $PRGNAM == mrustc ]] || [[ $PRGNAM == alacritty ]] || [[ $PRGNAM == "slack-term" ]] || [[ $PRGNAM == rtl8192eu-linux-driver ]] || [[ $PRGNAM == slack-libpurple ]] || [[ $PRGNAM == remacs ]] ; then
-      CURRENT="git$(printf "%s\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
+    elif [[ $PRGNAM == mrustc ]] || [[ $PRGNAM == alacritty ]] || [[ $PRGNAM == "slack-term" ]] || [[ $PRGNAM == rtl8192eu-linux-driver ]] || [[ $PRGNAM == slack-libpurple ]] || [[ $PRGNAM == remacs ]] || [[ $PRGNAM == early-ssh ]] ; then
+      CURRENT="git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     elif case "$PRGNAM" in kde1-*) true ;; *) false;; esac ; then
-      CURRENT="1.1.2.git$(printf "%s\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
+      CURRENT="1.1.2.git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     elif [[ $PRGNAM == gajim ]] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^gajim-//')"
     elif [[ $PRGNAM == noto-emoji ]] ; then
-      CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/-hamburger-fix//' | tr -d -)"
+      CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/-flag-update//' | tr -d -)"
     elif [[ $PRGNAM == python-nbxmpp ]] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^nbxmpp-//')"
     elif [[ $PRGNAM == qt1 ]] ; then
-      CURRENT="1.45.git$(printf "%s\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
+      CURRENT="1.45.git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     elif [[ $PRGNAM == slackroll ]] ; then
       CURRENT="v$CURRENT"
-      if [[ $CURRENT == v46 ]] && [[ $VERSION == git7f9a086 ]] ; then
-        CURRENT="git7f9a086"
-      fi
     elif [[ $PRGNAM == sslscan ]] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/-rbsec$//')"
     elif [[ $PRGNAM == unicodedata2 ]] ; then
@@ -249,6 +251,6 @@ done
   fi
 
   if [[ $VERSION != "$CURRENT" ]] ; then
-    >&2 printf "Update detected for %s. New Version '%s'\n" "$PRGNAM" "$CURRENT"
+    >&2 printf "Update detected for %s. New Version '%s'\\n" "$PRGNAM" "$CURRENT"
   fi
 done
