@@ -26,7 +26,7 @@ w3m_fetch() {
   w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump "$1"
 }
 
-for cmd in w3m git curl jsawk ; do
+for cmd in w3m git curl jsawk xmllint ; do
   if ! command -v "$cmd" > /dev/null 2>&1 ; then
     >&2 echo "This script requires $cmd to run."
     exit 1

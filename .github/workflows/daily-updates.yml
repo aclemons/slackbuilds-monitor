@@ -22,8 +22,7 @@ jobs:
           git clone --depth 1 git://git.slackbuilds.org/slackbuilds.git slackbuilds.org
       - run: |
           sudo apt-get update
-          sudo apt-get install w3m
-          sudo apt-get install libmozjs-78-0 libmozjs-78-dev
+          sudo apt-get install w3m libxml2-utils libmozjs-78-0 libmozjs-78-dev
           curl -f -s https://raw.githubusercontent.com/micha/jsawk/5a14c4af3c7b59807701b70a954ecefc6f77e978/jsawk | sudo tee /usr/local/bin/jsawk
           sudo chmod 0755 /usr/local/bin/jsawk
           sudo sed -i 's/^JSBIN=.*$/JSBIN=js78/' /usr/local/bin/jsawk
