@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
+
+CWD="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+
+# install updates
+sudo apt-get update
+sudo apt-get install w3m libxml2-utils libmozjs-78-0 libmozjs-78-dev
+
+# install jswawk
+JSAWK_VERSION=5a14c4af3c7b59807701b70a954ecefc6f77e978
+curl -f -s "https://raw.githubusercontent.com/micha/jsawk/$JSAWK_VERSION/jsawk" | sudo tee /usr/local/bin/jsawk
+sudo chmod 0755 /usr/local/bin/jsawk
+sudo sed -i 's/^JSBIN=.*$/JSBIN=js78/' /usr/local/bin/jsawk
+
+"$CWD/../../../monitor_slackbuilds.sh" 3>&1 1>/dev/null 2>&3- | tee "$CWD/../../../updates"
+
+delimiter="$(openssl rand -hex 8)"
+
+{
+  printf 'UPDATES<<%s\n' "$delimiter"
+  printf 'Here are your outdated builds as of %s:\n\n' "$(date +"%Y-%m-%dT%H:%M:%S%z")"
+  cat updates
+  printf '%s\n' "$delimiter"
+} >> "$GITHUB_ENV"

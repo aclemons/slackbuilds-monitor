@@ -21,23 +21,7 @@ jobs:
       - run: |
           git clone --depth 1 git://git.slackbuilds.org/slackbuilds.git slackbuilds.org
       - run: |
-          sudo apt-get update
-          sudo apt-get install w3m libxml2-utils libmozjs-78-0 libmozjs-78-dev
-          curl -f -s https://raw.githubusercontent.com/micha/jsawk/5a14c4af3c7b59807701b70a954ecefc6f77e978/jsawk | sudo tee /usr/local/bin/jsawk
-          sudo chmod 0755 /usr/local/bin/jsawk
-          sudo sed -i 's/^JSBIN=.*$/JSBIN=js78/' /usr/local/bin/jsawk
-      - run: |
-          set -o pipefail
-          GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" SLACKBUILDS_DIR="$(pwd)/slackbuilds.org" MYSLACKBUILDS_DIR="$(pwd)/slackbuilds" HINTS_DIR="$(pwd)/slackrepo-local-hints" ./monitor_slackbuilds.sh 3>&1 1>/dev/null 2>&3- | tee updates
-
-          delimiter="$(openssl rand -hex 8)"
-
-          {
-              printf 'UPDATES<<%s\n' "$delimiter"
-              printf 'Here are your outdated builds as of %s:\n\n' "$(date +"%Y-%m-%dT%H:%M:%S%z")"
-              cat updates
-              printf '%s\n' "$delimiter"
-          } >> "$GITHUB_ENV"
+          GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" SLACKBUILDS_DIR="$(pwd)/slackbuilds.org" MYSLACKBUILDS_DIR="$(pwd)/slackbuilds" HINTS_DIR="$(pwd)/slackrepo-local-hints" ./.github/workflows/bin/run-monitor
       - uses: aclemons/xmpp-notifier@bceed0f7a8fff10c5ca0fb9976adfe617b5edfdd
         with:
           jid: ${{ secrets.XMPP_JID }}
