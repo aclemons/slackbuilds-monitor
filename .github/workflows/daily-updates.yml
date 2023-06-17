@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
-      - uses: processone/xmpp-notifier@63f9120194390db3283f89527b8f16e8bd8a3115 # v1.0.0
+      - uses: aclemons/xmpp-notifier@master
         with:
           jid: ${{ secrets.XMPP_JID }}
           password: ${{ secrets.XMPP_PASSWORD }}
