@@ -1,28 +1,28 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:base",
-    "helpers:pinGitHubActionDigests"
-  ],
-  "packageRules": [
-    {
-      "matchDepNames": "github actions runner ubuntu",
-      "extractVersion": "^ubuntu(?<version>\\d\\d)\/\\d+.\\.\\d+$"
-    }
-  ],
-  "regexManagers": [
-    {
-      "fileMatch": [
-        "^(workflow-templates|\\.github\\/workflows)\\/[^/]+\\.[Yy][Aa]?[Mm][Ll]$",
-        "(^|\\/)action\\.[Yy][Aa]?[Mm][Ll]$"
-      ],
-      "matchStrings": [
-          "ubuntu-(?<currentValue>\\d\\d)\\.04"
-      ],
-      "depNameTemplate": "github actions runner ubuntu",
-      "packageNameTemplate": "actions/runner-images",
-      "datasourceTemplate": "github-releases",
-      "versioningTemplate": "docker"
-    }
-  ]
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:base",
+        "helpers:pinGitHubActionDigests"
+    ],
+    "packageRules": [
+        {
+            "matchDepNames": "github actions runner ubuntu",
+            "extractVersion": "^ubuntu(?<version>\\d\\d)/\\d+.\\.\\d+$"
+        }
+    ],
+    "regexManagers": [
+        {
+            "fileMatch": [
+                "^(workflow-templates|\\.github\\/workflows)\\/[^/]+\\.[Yy][Aa]?[Mm][Ll]$",
+                "(^|\\/)action\\.[Yy][Aa]?[Mm][Ll]$"
+            ],
+            "matchStrings": [
+                "ubuntu-(?<currentValue>\\d\\d)\\.04"
+            ],
+            "depNameTemplate": "github actions runner ubuntu",
+            "packageNameTemplate": "actions/runner-images",
+            "datasourceTemplate": "github-releases",
+            "versioningTemplate": "docker"
+        }
+    ]
 }
