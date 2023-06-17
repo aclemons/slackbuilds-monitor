@@ -33,7 +33,7 @@ for cmd in w3m git curl jsawk ; do
   fi
 done
 
-GITHUB_PASS="$(pass github | head -1)"
+GITHUB_TOKEN="${GITHUB_TOKEN:-$(pass github | head -1)}"
 
 SLACKBUILDS_DIR=${SLACKBUILDS_DIR:-~/workspace/slackbuilds.org}
 MYSLACKBUILDS_DIR=${MYSLACKBUILDS_DIR:-~/workspace/slackbuilds}
@@ -240,7 +240,7 @@ fi
       PRGNAM="mononoki"
     fi
 
-    JSON="$(curl -f --user "aclemons:$GITHUB_PASS" -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE?per_page=100")"
+    JSON="$(curl -f --header "Authorization: Bearer $GITHUB_TOKEN" -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE?per_page=100")"
 
     if [[ $PRGNAM == dropbear ]] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "ltm-0.30-orig" || this.name.substring(0, 6) === "libtom" || this.name.substring(0, 4) === "LTM_" || this.name.substring(0, 4) === "LTC_" || this.name === "maemo-0.52-2") return null')"
