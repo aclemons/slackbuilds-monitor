@@ -21,6 +21,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 set -e
+set -o pipefail
 
 w3m_fetch() {
   w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump "$1"
@@ -256,9 +257,9 @@ fi
     if [[ $PRGNAM == appstream-glib ]] ; then
       CURRENT="$(echo "$CURRENT" | sed -e 's/^appstream_glib_//' -e 's/_/./g')"
     elif [[ $PRGNAM == dropbear ]] ; then
-      CURRENT="$(echo "$CURRENT" | sed -e 's/^DROPBEAR_//')"
+      CURRENT="${CURRENT#DROPBEAR_}"
     elif [[ $PRGNAM == fleet ]] ; then
-      CURRENT="$(echo "$CURRENT" | sed -e 's/^fleet-v//')"
+      CURRENT="${CURRENT#fleet-v}"
     elif [[ $PRGNAM == slack-libpurple ]] || [[ $PRGNAM == early-ssh ]] || [[ $PRGNAM == rtw88 ]]; then
       CURRENT="git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     elif case "$PRGNAM" in kde1-*) true ;; *) false;; esac ; then
