@@ -119,6 +119,8 @@ fi
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://pypi.org/pypi/$PYNAME/json" | jq -r '.releases | keys | last')"
   elif [[ $PRGNAM == python-nbxmpp ]]; then
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/11/repository/tags" | jq -r '.[0] | .name')"
+  elif [[ $PRGNAM == racer ]]; then
+    CURRENT="$(curl -f -s -H "Accept: application/json" "https://crates.io/api/v1/crates/racer" | jq -r '.versions | first | .num')"
   elif case "$PRGNAM" in rubygem*) true ;; *) false ;; esac; then
     GEMNAME="${PRGNAM#"rubygem-"}"
     CURRENT="$(curl -f -s "https://rubygems.org/api/v1/gems/$GEMNAME.json" | jq -r '.version')"
@@ -162,7 +164,6 @@ fi
            python-precis-i18n) printf "%s\\n" "byllyfish" ;;
           python-unicodedata2) printf "%s\\n" "fonttools" ;;
                        qtpass) printf "%s\\n" "IJHack" ;;
-                        racer) printf "%s\\n" "racer-rust" ;;
              rbenv|ruby-build) printf "%s\\n" "rbenv" ;;
                         rtw88) printf "%s\\n" "lwfinger" ;;
                       ripgrep) printf "%s\\n" "BurntSushi" ;;
@@ -186,7 +187,7 @@ fi
 
     RESOURCE="$(
       case $PRGNAM in
-        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|racer|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "tags" ;;
+        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "tags" ;;
                                                                                            early-ssh|kde1-*|qt1|rtw88|slack-libpurple) printf "%s\\n" "commits" ;;
                                                                                                                                                                            *) printf "%s\\n" "releases" ;;
       esac
@@ -194,7 +195,7 @@ fi
 
     FIELD="$(
       case $PRGNAM in
-        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|racer|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "name" ;;
+        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "name" ;;
                                                                                             early-ssh|kde1-*|qt1|rtw88|slack-libpurple) printf "%s\\n" "sha" ;;
                                                                                                                                                                            *) printf "%s\\n" "tag_name" ;;
       esac
@@ -242,8 +243,8 @@ fi
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 4) === "v201" || this.name.substring(0, 4) === "v202") return null')"
     elif [[ $PRGNAM == python-axolotl ]]; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.1.6") return null')"
-    elif [[ $PRGNAM == racer ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 3) === "v1." || this.name === "phil" || this.name === "old-dev" || this.name.substring(0, 3) === "foo" || this.name === "dev" || this.name === "before" || this.name === "2.07") return null')"
+    elif [[ $PRGNAM == osquery ]]; then
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.prerelease != "true")) | first | .name')"
     elif [[ $PRGNAM == ripgrep ]]; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "ignore-0.4.5" || this.name === "ignore-0.4.6" || this.name === "grep-searcher-0.1.2") return null')"
     elif [[ $PRGNAM == ruby-progressbar ]]; then
@@ -277,10 +278,6 @@ fi
       fi
     elif [[ $PRGNAM == qt1 ]] ; then
       CURRENT="1.45.git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
-    elif [[ $PRGNAM == racer ]] ; then
-      if [[ $CURRENT == 2.0.12 ]] ; then
-        CURRENT="2.0.13"
-      fi
     elif [[ $PRGNAM == slackroll ]] ; then
       CURRENT="v$CURRENT"
     elif [[ $PRGNAM == sslscan ]] ; then
