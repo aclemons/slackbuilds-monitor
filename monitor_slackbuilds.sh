@@ -103,24 +103,14 @@ fi
     fi
   elif [[ $PRGNAM == emailrelay ]]; then
     CURRENT="$(w3m_fetch "https://sourceforge.net/projects/emailrelay/files/emailrelay/" | sed -n '/^     Name/,$p' | sed -n '3p' | sed 's/^[[:space:]]*//' | sed 's/\([^ ]*\).*$/\1/')"
-  elif [[ $PRGNAM == iscan-plugin-gt-x770 ]] ; then
-    RAW="$(curl -f -s 'https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=iscan-plugin-epson-v500-photo')"
-    PKGVERSION="$(printf '%s\n' "$RAW" | sed -n '/^_pkgver/p' | sed 's/^_pkgver=//')"
-    PKGRELEASE="$(printf '%s\n' "$RAW" | sed -n '/^_pkgrel/p' | sed 's/^_pkgrel=//')"
-    CURRENT="$PKGVERSION"_"$PKGRELEASE"
   elif [[ $PRGNAM == gajim ]]; then
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/30/repository/tags" | jq -r '.[0] | .name')"
   elif [[ $PRGNAM == jenkins ]]; then
     CURRENT="$(w3m_fetch "https://mirrors.jenkins.io/war-stable/" | sed '1,/^Parent Directory/d' | sed '1d' | sed -n '1p' | cut -d' ' -f1 | sed 's/\/$//')"
-  elif [[ $PRGNAM == postgresql ]]; then
-    CURRENT="$(w3m_fetch "https://www.postgresql.org/ftp/source/" | sed -n '/^v10\./p' | sed -n '1 s/^v\(10\.[[:digit:]]*\).*$/\1/p')"
   elif case "$PRGNAM" in haskell-*) true ;; *) false ;; esac; then
     HACKAGENAME="${PRGNAM#"haskell-"}"
     CURRENT="$(xmllint --xpath "string((//*[local-name()='item']/*[local-name()='title']/text())[1])" <(curl -f -s "https://hackage.haskell.org/package/$HACKAGENAME.rss") | cut -d ' ' -f1)"
     CURRENT="${CURRENT#"$HACKAGENAME"-}"
-  elif [[ $PRGNAM == prosody ]]; then
-    CURRENT="$(xmllint --xpath "string((//*[local-name()='entry']/*[local-name()='link']//@href)[1])" <(curl -s https://hg.prosody.im/0.11/atom-log) | sed 's/http:/https:/')"
-    CURRENT="0.11.r$(w3m_fetch "$CURRENT" | sed -n '/^changeset /p' | sed 's/^changeset \(.*\)$/\1/')"
   elif [[ $PRGNAM == python-axolotl-curve25519 ]]; then
     CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/python-axolotl-curve25519/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
   elif [[ $PRGNAM == python-jeepney ]] || [[ $PRGNAM == python-css-parser ]] || [[ $PRGNAM == rfc6555 ]] ; then
