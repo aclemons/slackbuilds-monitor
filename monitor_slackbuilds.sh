@@ -94,8 +94,7 @@ fi
   fi
 
   if [[ $PRGNAM == binfmt-support ]] ; then
-    JSON="$(curl -f -s -H "Accept: application/json" "https://gitlab.com/api/v4/projects/22757105/repository/tags")"
-    CURRENT="$(printf '%s\n' "$JSON" | jsawk -n "if (\$_ == 0) out(this.name)")"
+    CURRENT="$(curl -f -s -H "Accept: application/json" "https://gitlab.com/api/v4/projects/22757105/repository/tags" | jq -r '.[0] | .name')"
   elif [[ $PRGNAM == eclipse-cpp ]] || [[ $PRGNAM == eclipse-java ]] || [[ $PRGNAM == eclipse-jee ]] ; then
     CURRENT="$(w3m_fetch "https://www.eclipse.org/downloads/eclipse-packages/" | sed '/^Eclipse /!d' | grep Packages | sed 's/^Eclipse \(.*\) R Packages.*$/\1/;s/-//g;s/IDE //')"
 
@@ -110,9 +109,7 @@ fi
     PKGRELEASE="$(printf '%s\n' "$RAW" | sed -n '/^_pkgrel/p' | sed 's/^_pkgrel=//')"
     CURRENT="$PKGVERSION"_"$PKGRELEASE"
   elif [[ $PRGNAM == gajim ]]; then
-    JSON="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/30/repository/tags")"
-    CURRENT="$(printf '%s\n' "$JSON" | jsawk -n "if (\$_ == 0) out(this.name)" | sed 's/^v//')"
-    CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^gajim-//;s/-/_/')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/30/repository/tags" | jq -r '.[0] | .name')"
   elif [[ $PRGNAM == jenkins ]]; then
     CURRENT="$(w3m_fetch "https://mirrors.jenkins.io/war-stable/" | sed '1,/^Parent Directory/d' | sed '1d' | sed -n '1p' | cut -d' ' -f1 | sed 's/\/$//')"
   elif [[ $PRGNAM == postgresql ]]; then
@@ -125,17 +122,15 @@ fi
     CURRENT="$(xmllint --xpath "string((//*[local-name()='entry']/*[local-name()='link']//@href)[1])" <(curl -s https://hg.prosody.im/0.11/atom-log) | sed 's/http:/https:/')"
     CURRENT="0.11.r$(w3m_fetch "$CURRENT" | sed -n '/^changeset /p' | sed 's/^changeset \(.*\)$/\1/')"
   elif [[ $PRGNAM == python-axolotl-curve25519 ]]; then
-    CURRENT="$(curl -s -H "Accept: application/json" https://pypi.org/pypi/python-axolotl-curve25519/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/python-axolotl-curve25519/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
   elif [[ $PRGNAM == python-jeepney ]] || [[ $PRGNAM == python-css-parser ]] || [[ $PRGNAM == rfc6555 ]] ; then
     PYNAME="${PRGNAM#"python-"}"
-    CURRENT="$(curl -s -H "Accept: application/json" "https://pypi.org/pypi/$PYNAME/json" | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" "https://pypi.org/pypi/$PYNAME/json" | jq -r '.releases | keys | last')"
   elif [[ $PRGNAM == python-nbxmpp ]]; then
-    JSON="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/11/repository/tags")"
-    CURRENT="$(printf '%s\n' "$JSON" | jsawk -n "if (\$_ == 0) out(this.name)" | sed 's/^v//')"
-    CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^nbxmpp-//')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/11/repository/tags" | jq -r '.[0] | .name')"
   elif case "$PRGNAM" in rubygem*) true ;; *) false ;; esac; then
     GEMNAME="${PRGNAM#"rubygem-"}"
-    CURRENT="$(curl -s "https://rubygems.org/api/v1/gems/$GEMNAME.json" | jsawk 'return this.version')"
+    CURRENT="$(curl -f -s "https://rubygems.org/api/v1/gems/$GEMNAME.json" | jq -r '.version')"
   elif [[ $PRGNAM == run-one ]]; then
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
   elif [[ $PRGNAM == t-prot ]]; then
@@ -163,7 +158,7 @@ fi
                   json-parser) printf "%s\\n" "json-parser" ;;
                    kde1-*|qt1) printf "%s\\n" "KDE" ;;
              libreadline-java) printf "%s\\n" "aclemons" ;;
-                     libjcat) printf "%s\\n" "hughsie" ;;
+                      libjcat) printf "%s\\n" "hughsie" ;;
                       libxmlb) printf "%s\\n" "hughsie" ;;
                      newsboat) printf "%s\\n" "newsboat" ;;
                  node-xoauth2) printf "%s\\n" "andris9" ;;
@@ -200,7 +195,7 @@ fi
 
     RESOURCE="$(
       case $PRGNAM in
-        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|python-nbxmpp|qtpass|racer|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "tags" ;;
+        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|racer|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "tags" ;;
                                                                                            early-ssh|kde1-*|qt1|rtw88|slack-libpurple) printf "%s\\n" "commits" ;;
                                                                                                                                                                            *) printf "%s\\n" "releases" ;;
       esac
@@ -208,7 +203,7 @@ fi
 
     FIELD="$(
       case $PRGNAM in
-        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|python-nbxmpp|qtpass|racer|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "name" ;;
+        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|racer|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "name" ;;
                                                                                             early-ssh|kde1-*|qt1|rtw88|slack-libpurple) printf "%s\\n" "sha" ;;
                                                                                                                                                                            *) printf "%s\\n" "tag_name" ;;
       esac
@@ -289,8 +284,6 @@ fi
       if [[ $CURRENT == 1.0 ]] ; then
         CURRENT="1.0.0"
       fi
-    elif [[ $PRGNAM == python-nbxmpp ]] ; then
-      CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^nbxmpp-//')"
     elif [[ $PRGNAM == qt1 ]] ; then
       CURRENT="1.45.git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     elif [[ $PRGNAM == racer ]] ; then
