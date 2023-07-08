@@ -244,7 +244,6 @@ fi
     elif [[ $PRGNAM == python-axolotl ]]; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.1.6") return null')"
     elif [[ $PRGNAM == osquery ]]; then
-      print 'JSON=%s\n' "$JSON"
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.prerelease != true))')"
     elif [[ $PRGNAM == ripgrep ]]; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "ignore-0.4.5" || this.name === "ignore-0.4.6" || this.name === "grep-searcher-0.1.2") return null')"
