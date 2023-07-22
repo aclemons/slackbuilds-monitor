@@ -159,7 +159,6 @@ fi
                   osquery-bin) printf "%s\\n" "osquery" ;;
                 python-argopt) printf "%s\\n" "casperdcl" ;;
                python-axolotl) printf "%s\\n" "tgalal" ;;
-             python-fonttools) printf "%s\\n" "fonttools" ;;
      python-mysql-replication) printf "%s\\n" "julien-duponchelle" ;;
            python-precis-i18n) printf "%s\\n" "byllyfish" ;;
           python-unicodedata2) printf "%s\\n" "fonttools" ;;
@@ -213,14 +212,12 @@ fi
       PRGNAM="xoauth2"
     elif [[ $PRGNAM == osquery-bin ]]; then
       PRGNAM=osquery
-    elif [[ $PRGNAM == python-fonttools ]] || [[ $PRGNAM == python-unicodedata2 ]] || [[ $PRGNAM == python-argopt ]] || [[ $PRGNAM == python-precis-i18n ]] || [[ $PRGNAM == python2-selectors2 ]] ; then
+    elif [[ $PRGNAM == python-unicodedata2 ]] || [[ $PRGNAM == python-argopt ]] || [[ $PRGNAM == python-precis-i18n ]] || [[ $PRGNAM == python2-selectors2 ]] ; then
       PRGNAM=${PRGNAM#python-}
       PRGNAM=${PRGNAM#python2-}
       if [[ $PRGNAM == precis-i18n ]] ; then
         PRGNAM=precis_i18n
       fi
-    elif [[ $PRGNAM == slackrepo-hints ]]; then
-      PRGNAM="slackrepo-hints"
     elif [[ $PRGNAM == svn-all-fast-export ]]; then
       PRGNAM="svn2git"
     elif [[ $PRGNAM == ttf-mononoki ]]; then
@@ -231,8 +228,6 @@ fi
 
     if [[ $PRGNAM == dropbear ]] ; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "ltm-0.30-orig" || this.name.substring(0, 6) === "libtom" || this.name.substring(0, 4) === "LTM_" || this.name.substring(0, 4) === "LTC_" || this.name === "maemo-0.52-2") return null')"
-    elif [[ $PRGNAM == efivar ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 6) === "efivar" || this.name.substring(0, 7) === "abidiff") return null')"
     elif [[ $PRGNAM == exa ]]; then
       JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.9.0-pre") return null')"
     elif [[ $PRGNAM == fwupd ]]; then
@@ -261,7 +256,7 @@ fi
       CURRENT="${CURRENT#DROPBEAR_}"
     elif [[ $PRGNAM == fleet ]] ; then
       CURRENT="${CURRENT#fleet-v}"
-    elif [[ $PRGNAM == slack-libpurple ]] || [[ $PRGNAM == early-ssh ]] || [[ $PRGNAM == rtw88 ]]; then
+    elif [[ $PRGNAM == slack-libpurple ]] || [[ $PRGNAM == early-ssh ]] ; then
       CURRENT="git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     elif case "$PRGNAM" in kde1-*) true ;; *) false;; esac ; then
       CURRENT="1.1.2.git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
@@ -271,10 +266,6 @@ fi
       CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/unicode13//' | tr -d -)"
       if [[ $CURRENT == "20200916_1" ]] ; then
         CURRENT="20200916"
-      fi
-    elif [[ $PRGNAM == precis_i18n ]] ; then
-      if [[ $CURRENT == 1.0 ]] ; then
-        CURRENT="1.0.0"
       fi
     elif [[ $PRGNAM == qt1 ]] ; then
       CURRENT="1.45.git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
