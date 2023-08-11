@@ -1,9 +1,10 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        "config:base",
+        "config:best-practices",
         "helpers:pinGitHubActionDigests"
     ],
+    "rangeStrategy": "pin",
     "packageRules": [
         {
             "matchDepNames": "ubuntu gha runner",
