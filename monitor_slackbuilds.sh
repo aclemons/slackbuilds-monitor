@@ -129,7 +129,7 @@ fi
   elif [[ $PRGNAM == t-prot ]]; then
     CURRENT="$(w3m_fetch "http://www.escape.de/~tolot/mutt/t-prot/downloads/" | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
   elif [[ $PRGNAM == vuescan ]]; then
-    CURRENT="$(curl -f -s https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/vuescan.rb | sed -n '/version /p' | sed "s/^[[:space:]]*//;s/'//g" | sed 's/"//g' | cut -d ' ' -f2)"
+    CURRENT="$(curl -f -s https://raw.githubusercontent.com/Homebrew/homebrew-cask/master/Casks/v/vuescan.rb | sed -n '/version /p' | sed "s/^[[:space:]]*//;s/'//g" | sed 's/"//g' | cut -d ' ' -f2)"
   else
     USER="$(
       case $PRGNAM in
