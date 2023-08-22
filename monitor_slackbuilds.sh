@@ -112,8 +112,14 @@ fi
     HACKAGENAME="${PRGNAM#"haskell-"}"
     CURRENT="$(xmllint --xpath "string((//*[local-name()='item']/*[local-name()='title']/text())[1])" <(curl -f -s "https://hackage.haskell.org/package/$HACKAGENAME.rss") | cut -d ' ' -f1)"
     CURRENT="${CURRENT#"$HACKAGENAME"-}"
+  elif [[ $PRGNAM == pre-commit ]]; then
+    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/pre-commit/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
   elif [[ $PRGNAM == python-axolotl-curve25519 ]]; then
     CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/python-axolotl-curve25519/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
+  elif [[ $PRGNAM == python3-cfgv ]]; then
+    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/cfgv/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
+  elif [[ $PRGNAM == python3-identify ]]; then
+    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/identify/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
   elif [[ $PRGNAM == python-jeepney ]] || [[ $PRGNAM == python-css-parser ]] || [[ $PRGNAM == rfc6555 ]] ; then
     PYNAME="${PRGNAM#"python-"}"
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://pypi.org/pypi/$PYNAME/json" | jq -r '.releases | keys | last')"
