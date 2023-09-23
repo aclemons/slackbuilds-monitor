@@ -96,11 +96,15 @@ fi
 
   if [[ $PRGNAM == binfmt-support ]] ; then
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://gitlab.com/api/v4/projects/22757105/repository/tags" | jq -r '.[0] | .name')"
-  elif [[ $PRGNAM == eclipse-cpp ]] || [[ $PRGNAM == eclipse-java ]] || [[ $PRGNAM == eclipse-jee ]] ; then
+  elif [[ $PRGNAM == eclipse-cpp ]] || [[ $PRGNAM == eclipse-java ]] || [[ $PRGNAM == eclipse-jee ]] || [[ $PRGNAM == eclipse-php ]] ; then
     CURRENT="$(w3m_fetch "https://www.eclipse.org/downloads/eclipse-packages/" | sed '/^Eclipse /!d' | grep Packages | sed 's/^Eclipse \(.*\) R Packages.*$/\1/;s/-//g;s/IDE //')"
 
-    if [[ $CURRENT == "202306" ]] ; then
-      CURRENT="4.28"
+    if [[ $CURRENT == "202309" ]] ; then
+      CURRENT="4.29"
+    fi
+
+    if [[ $CURRENT == "202312" ]] ; then
+      CURRENT="4.30"
     fi
   elif [[ $PRGNAM == emailrelay ]]; then
     CURRENT="$(w3m_fetch "https://sourceforge.net/projects/emailrelay/files/emailrelay/" | sed -n '/^     Name/,$p' | sed -n '3p' | sed 's/^[[:space:]]*//' | sed 's/\([^ ]*\).*$/\1/')"
