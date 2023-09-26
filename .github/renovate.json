@@ -11,7 +11,7 @@
             "extractVersion": "^ubuntu(?<version>\\d\\d).*?$"
         }
     ],
-    "regexManagers": [
+    "customManagers": [
         {
             "customType": "regex",
             "fileMatch": [
