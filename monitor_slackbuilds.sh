@@ -123,7 +123,7 @@ fi
   elif [[ $PRGNAM == python3-cfgv ]]; then
     CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/cfgv/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
   elif [[ $PRGNAM == python3-identify ]]; then
-    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/identify/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/identify/json | jq -r '.releases | keys_unsorted | .[]'  | sort --version-sort | sed -n '$p')"
   elif [[ $PRGNAM == python-jeepney ]] || [[ $PRGNAM == python-css-parser ]] || [[ $PRGNAM == rfc6555 ]] ; then
     PYNAME="${PRGNAM#"python-"}"
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://pypi.org/pypi/$PYNAME/json" | jq -r '.releases | keys | last')"
