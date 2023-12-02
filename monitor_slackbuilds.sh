@@ -143,10 +143,12 @@ fi
   else
     USER="$(
       case $PRGNAM in
+                   actionlint) printf "%s\\n" "rhysd" ;;
                     alacritty) printf "%s\\n" "alacritty" ;;
                appstream-glib) printf "%s\\n" "hughsie" ;;
                          buku) printf "%s\\n" "jarun" ;;
                      bukubrow) printf "%s\\n" "SamHH" ;;
+                           cw) printf "%s\\n" "lucagrulla" ;;
                      dropbear) printf "%s\\n" "mkj" ;;
                 docker-buildx) printf "%s\\n" "docker" ;;
                     early-ssh) printf "%s\\n" "gheja" ;;
@@ -187,6 +189,7 @@ fi
                       sslscan) printf "%s\\n" "rbsec" ;;
           svn-all-fast-export) printf "%s\\n" "svn-all-fast-export" ;;
                  tagainijisho) printf "%s\\n" "Gnurou" ;;
+                      thefuck) printf "%s\\n" "nvbn" ;;
                  ttf-mononoki) printf "%s\\n" "madmalik" ;;
                         vtcol) printf "%s\\n" "phi-gamma" ;;
                        unison) printf "%s\\n" "bcpierce00" ;;
