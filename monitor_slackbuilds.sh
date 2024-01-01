@@ -149,6 +149,7 @@ fi
                          buku) printf "%s\\n" "jarun" ;;
                      bukubrow) printf "%s\\n" "SamHH" ;;
                            cw) printf "%s\\n" "lucagrulla" ;;
+                       disper) printf "%s\\n" "apeyser" ;;
                      dropbear) printf "%s\\n" "mkj" ;;
                 docker-buildx) printf "%s\\n" "docker" ;;
                     early-ssh) printf "%s\\n" "gheja" ;;
@@ -199,7 +200,7 @@ fi
 
     RESOURCE="$(
       case $PRGNAM in
-        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "tags" ;;
+        appstream-glib|disper|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "tags" ;;
                                                                                            early-ssh|kde1-*|qt1|rtw88|slack-libpurple) printf "%s\\n" "commits" ;;
                                                                                                                                                                            *) printf "%s\\n" "releases" ;;
       esac
@@ -207,7 +208,7 @@ fi
 
     FIELD="$(
       case $PRGNAM in
-        appstream-glib|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "name" ;;
+        appstream-glib|disper|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "name" ;;
                                                                                             early-ssh|kde1-*|qt1|rtw88|slack-libpurple) printf "%s\\n" "sha" ;;
                                                                                                                                                                            *) printf "%s\\n" "tag_name" ;;
       esac
@@ -265,6 +266,8 @@ fi
 
     if [[ $PRGNAM == appstream-glib ]] ; then
       CURRENT="$(echo "$CURRENT" | sed -e 's/^appstream_glib_//' -e 's/_/./g')"
+    elif [[ $PRGNAM == disper ]] ; then
+      CURRENT="${CURRENT#disper-}"
     elif [[ $PRGNAM == dropbear ]] ; then
       CURRENT="${CURRENT#DROPBEAR_}"
     elif [[ $PRGNAM == fleet ]] ; then
