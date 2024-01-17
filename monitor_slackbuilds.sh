@@ -192,6 +192,7 @@ fi
                  tagainijisho) printf "%s\\n" "Gnurou" ;;
                       thefuck) printf "%s\\n" "nvbn" ;;
                  ttf-mononoki) printf "%s\\n" "madmalik" ;;
+                      tofuenv) printf "%s\\n" "tofuutils" ;;
                         vtcol) printf "%s\\n" "phi-gamma" ;;
                        unison) printf "%s\\n" "bcpierce00" ;;
                             *) >&2 printf "Unknown program %s\\n" "$PRGNAM" && exit 1 ;;
