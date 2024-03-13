@@ -10,22 +10,5 @@
             "matchDepNames": "ubuntu gha runner",
             "extractVersion": "^ubuntu(?<version>\\d\\d).*?$"
         }
-    ],
-    "customManagers": [
-        {
-            "customType": "regex",
-            "fileMatch": [
-                "^.github/(?:workflows|actions)/.+\\.ya?ml$"
-            ],
-            "matchStrings": [
-                "ubuntu-(?<currentValue>\\d\\d|latest)(\\.\\d\\d)?"
-            ],
-            "depNameTemplate": "ubuntu gha runner",
-            "packageNameTemplate": "actions/runner-images",
-            "datasourceTemplate": "github-releases",
-            "versioningTemplate": "loose",
-            "currentValueTemplate": "{{{replace 'latest' '16' currentValue}}}",
-            "autoReplaceStringTemplate": "ubuntu-{{{newValue}}}.04"
-        }
     ]
 }
