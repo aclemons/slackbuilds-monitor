@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Copyright (C) 2016-2022 Andrew Clemons, Wellington New Zealand
-# Copyright (C) 2022-2023 Andrew Clemons, Tokyo Japan
+# Copyright (C) 2022-2024 Andrew Clemons, Tokyo Japan
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
