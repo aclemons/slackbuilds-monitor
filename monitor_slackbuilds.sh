@@ -166,6 +166,7 @@ fi
                    kde1-*|qt1) printf "%s\\n" "KDE" ;;
              libreadline-java) printf "%s\\n" "aclemons" ;;
                       libjcat) printf "%s\\n" "hughsie" ;;
+                    libsmbios) printf "%s\\n" "dell" ;;
                       libxmlb) printf "%s\\n" "hughsie" ;;
                      newsboat) printf "%s\\n" "newsboat" ;;
                  node-xoauth2) printf "%s\\n" "andris9" ;;
