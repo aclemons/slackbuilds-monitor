@@ -192,6 +192,7 @@ fi
                       sslscan) printf "%s\\n" "rbsec" ;;
           svn-all-fast-export) printf "%s\\n" "svn-all-fast-export" ;;
                  tagainijisho) printf "%s\\n" "Gnurou" ;;
+                        tfenv) printf "%s\\n" "tfutils" ;;
                       thefuck) printf "%s\\n" "nvbn" ;;
                  ttf-mononoki) printf "%s\\n" "madmalik" ;;
                       tofuenv) printf "%s\\n" "tofuutils" ;;
