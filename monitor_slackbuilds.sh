@@ -69,7 +69,7 @@ fi
     PRGNAM="$FILENAME"
   fi
 
-  if [[ $PRGNAM == henplus ]] || [[ $PRGNAM == vacation ]] || [[ $PRGNAM == picasa ]] || [[ $PRGNAM == slack-osquery ]] || [[ $PRGNAM == sof-firmware ]] || [[ $PRGNAM == zulu-openjdk8 ]] || [[ $PRGNAM == zulu-openjdk11 ]] || [[ $PRGNAM == zulu-openjdk17 ]] || [[ $PRGNAM == zulu-openjdk21 ]] || [[ $PRGNAM == zulu-openjdk6 ]] || [[ $PRGNAM == zulu-openjdk7 ]] || [[ $PRGNAM == pyenv ]] || [[ $PRGNAM == qemu-user-static-bin ]] || [[ $PRGNAM == libsmbios ]] || [[ $PRGNAM == ddbsh ]] || [[ $PRGNAM == t-prot ]] || [[ $PRGNAM == tfenv ]] ; then
+  if [[ $PRGNAM == henplus ]] || [[ $PRGNAM == vacation ]] || [[ $PRGNAM == picasa ]] || [[ $PRGNAM == slack-osquery ]] || [[ $PRGNAM == sof-firmware ]] || [[ $PRGNAM == zulu-openjdk8 ]] || [[ $PRGNAM == zulu-openjdk11 ]] || [[ $PRGNAM == zulu-openjdk17 ]] || [[ $PRGNAM == zulu-openjdk21 ]] || [[ $PRGNAM == zulu-openjdk6 ]] || [[ $PRGNAM == zulu-openjdk7 ]] || [[ $PRGNAM == pyenv ]] || [[ $PRGNAM == qemu-user-static-bin ]] || [[ $PRGNAM == t-prot ]] ; then
     continue
   fi
 
@@ -149,6 +149,7 @@ fi
                          buku) printf "%s\\n" "jarun" ;;
                      bukubrow) printf "%s\\n" "SamHH" ;;
                            cw) printf "%s\\n" "lucagrulla" ;;
+                        ddbsh) printf "%s\\n" "awslabs" ;;
                        disper) printf "%s\\n" "apeyser" ;;
                      dropbear) printf "%s\\n" "mkj" ;;
                 docker-buildx) printf "%s\\n" "docker" ;;
@@ -217,6 +218,8 @@ fi
 
     if [[ $PRGNAM == bukubrow ]]; then
       PRGNAM="bukubrow-host"
+    elif [[ $PRGNAM == ddbsh ]]; then
+      PRGNAM="dynamodb-shell"
     elif [[ $PRGNAM == docker-buildx ]]; then
       PRGNAM="buildx"
     elif [[ $PRGNAM == fleet-bin ]]; then
