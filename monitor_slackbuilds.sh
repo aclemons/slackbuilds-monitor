@@ -65,6 +65,11 @@ fi
     continue
   fi
 
+  if [[ $PRGNAM == "pandoc" ]] ; then
+    # currently causes an HTTP 500 on hackage.haskell.org
+    continue
+  fi
+
   if [[ -z $PRGNAM ]] ; then
     PRGNAM="$FILENAME"
   fi
@@ -112,7 +117,7 @@ fi
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/30/repository/tags" | jq -r '.[0] | .name')"
   elif [[ $PRGNAM == jenkins ]]; then
     CURRENT="$(w3m_fetch "https://mirrors.jenkins.io/war-stable/" | sed '1,/^Parent Directory/d' | sed '1d' | sed -n '1p' | cut -d' ' -f1 | sed 's/\/$//')"
-  elif case "$PRGNAM" in haskell-*) true ;; *) false ;; esac; then
+  elif case "$PRGNAM" in haskell-*) true ;; pandoc) true ;; *) false ;; esac; then
     HACKAGENAME="${PRGNAM#"haskell-"}"
     CURRENT="$(xmllint --xpath "string((//*[local-name()='item']/*[local-name()='title']/text())[1])" <(curl -f -s "https://hackage.haskell.org/package/$HACKAGENAME.rss") | cut -d ' ' -f1)"
     CURRENT="${CURRENT#"$HACKAGENAME"-}"
