@@ -173,6 +173,7 @@ fi
                  node-xoauth2) printf "%s\\n" "andris9" ;;
                    noto-emoji) printf "%s\\n" "googlefonts" ;;
                   osquery-bin) printf "%s\\n" "osquery" ;;
+                         pnpm) printf "%s\\n" "pnpm" ;;
                 python-argopt) printf "%s\\n" "casperdcl" ;;
                python-axolotl) printf "%s\\n" "tgalal" ;;
      python-mysql-replication) printf "%s\\n" "julien-duponchelle" ;;
