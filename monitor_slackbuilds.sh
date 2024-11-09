@@ -111,6 +111,8 @@ fi
     CURRENT="$(w3m_fetch "https://sourceforge.net/projects/emailrelay/files/emailrelay/" | sed -n '/^     Name/,$p' | sed -n '3p' | sed 's/^[[:space:]]*//' | sed 's/\([^ ]*\).*$/\1/')"
   elif [[ $PRGNAM == gajim ]]; then
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/30/repository/tags" | jq -r '.[0] | .name')"
+  elif [[ $PRGNAM == gopls ]]; then
+    CURRENT="$(w3m_fetch https://pkg.go.dev/golang.org/x/tools/gopls?tab=versions | sed -n '/Versions in this module/,$p' | sed 's/^v0$//' | sed -n '/^v/{s/^v//p;q}')"
   elif [[ $PRGNAM == jenkins ]]; then
     CURRENT="$(w3m_fetch "https://mirrors.jenkins.io/war-stable/" | sed '1,/^Parent Directory/d' | sed '1d' | sed -n '1p' | cut -d' ' -f1 | sed 's/\/$//')"
   elif case "$PRGNAM" in haskell-*) true ;; pandoc) true ;; *) false ;; esac; then
