@@ -187,7 +187,7 @@ fi
                        rustup) printf "%s\\n" "rust-lang" ;;
            python2-selectors2) printf "%s\\n" "sethmlarson" ;;
                     slackroll) printf "%s\\n" "slackroll" ;;
-                         skim) printf "%s\\n" "lotabout" ;;
+                         skim) printf "%s\\n" "skim-rs" ;;
               slack-libpurple) printf "%s\\n" "dylex" ;;
                     slackrepo) printf "%s\\n" "aclemons" ;;
               slackrepo-hints) printf "%s\\n" "aclemons" ;;
