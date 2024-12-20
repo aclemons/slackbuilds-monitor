@@ -163,6 +163,7 @@ fi
                         fwupd) printf "%s\\n" "fwupd" ;;
                           fzf) printf "%s\\n" "junegunn" ;;
                      git-fame) printf "%s\\n" "casperdcl" ;;
+                golangci-lint) printf "%s\\n" "golangci" ;;
                    imapfilter) printf "%s\\n" "lefcha" ;;
                         jsawk) printf "%s\\n" "micha" ;;
                   json-parser) printf "%s\\n" "json-parser" ;;
