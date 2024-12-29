@@ -253,7 +253,9 @@ fi
 
     JSON="$(curl -f --header "Authorization: Bearer $GITHUB_TOKEN" -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE?per_page=100")"
 
-    if [[ $PRGNAM == dropbear ]] ; then
+    if [[ $PRGNAM == alacritty ]]; then
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.tag_name | contains("-rc") | not))')"
+    elif [[ $PRGNAM == dropbear ]] ; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | startswith("DROPBEAR_")))')"
     elif [[ $PRGNAM == fwupd ]]; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | startswith("fwupd_") | not))')"
