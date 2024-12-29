@@ -7,13 +7,7 @@ CWD="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
 # install updates
 sudo apt-get update
-sudo apt-get install w3m libxml2-utils libmozjs-115-0t64 libmozjs-115-dev
-
-# install jswawk
-JSAWK_VERSION=5a14c4af3c7b59807701b70a954ecefc6f77e978
-curl -f -s "https://raw.githubusercontent.com/micha/jsawk/$JSAWK_VERSION/jsawk" | sudo tee /usr/local/bin/jsawk
-sudo chmod 0755 /usr/local/bin/jsawk
-sudo sed -i 's/^JSBIN=.*$/JSBIN=js115/' /usr/local/bin/jsawk
+sudo apt-get install w3m libxml2-utils
 
 "$CWD/../../../monitor_slackbuilds.sh" 3>&1 1>/dev/null 2>&3- | tee "$CWD/../../../updates"
 

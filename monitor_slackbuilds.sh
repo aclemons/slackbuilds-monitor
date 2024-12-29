@@ -27,9 +27,9 @@ w3m_fetch() {
   w3m -T text/html  -o frame=0 -o meta_refresh=0 -o auto_image=0 -dump "$1"
 }
 
-for cmd in w3m git curl jq jsawk xmllint ; do
+for cmd in w3m git curl jq xmllint ; do
   if ! command -v "$cmd" > /dev/null 2>&1 ; then
-    >&2 echo "This script requires $cmd to run."
+    >&2 printf "This script requires %s to run.\n" "$cmd"
     exit 1
   fi
 done
@@ -42,7 +42,7 @@ HINTS_DIR=${HINTS_DIR:-~/workspace/slackrepo-local-hints}
 MAINTAINER=${MAINTAINER:-andrew clemons}
 
 if [[ -z $MAINTAINER ]] ; then
- >&2 echo "maintainer?"
+ >&2 printf "maintainer?\n"
  exit 1
 fi
 
@@ -89,14 +89,14 @@ fi
   fi
 
   if [[ $EXTENSION == hint ]] ; then
-    echo "Checking for updates of $PRGNAM. Currently $VERSION (non-maintainer)"
+    printf "Checking for updates of %s. Currently %s (non-maintainer)\n" "$PRGNAM" "$VERSION"
   else
     if [[ -e "$HINTS_DIR/$PRGNAM.hint" ]] ; then
       # shellcheck source=/dev/null
       . "$HINTS_DIR/$PRGNAM.hint"
     fi
 
-    echo "Checking for updates of $PRGNAM. Currently $VERSION"
+    printf "Checking for updates of %s. Currently %s\n" "$PRGNAM" "$VERSION"
   fi
 
   if [[ $PRGNAM == binfmt-support ]] ; then
@@ -120,13 +120,13 @@ fi
     CURRENT="$(xmllint --xpath "string((//*[local-name()='item']/*[local-name()='title']/text())[1])" <(curl -f -s "https://hackage.haskell.org/package/$HACKAGENAME.rss") | cut -d ' ' -f1)"
     CURRENT="${CURRENT#"$HACKAGENAME"-}"
   elif [[ $PRGNAM == pre-commit ]]; then
-    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/pre-commit/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/pre-commit/json | jq -r '.releases | keys | last')"
   elif [[ $PRGNAM == python-axolotl-curve25519 ]]; then
-    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/python-axolotl-curve25519/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/python-axolotl-curve25519/json | jq -r '.releases  | keys | last')"
   elif [[ $PRGNAM == python3-cfgv ]]; then
-    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/cfgv/json | jsawk 'return (Object.keys(this.releases))[Object.keys(this.releases).length - 1]')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/cfgv/json | jq -r '.releases  | keys | last')"
   elif [[ $PRGNAM == python3-identify ]]; then
-    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/identify/json | jq -r '.releases | keys_unsorted | .[]'  | sort --version-sort | sed -n '$p')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" https://pypi.org/pypi/identify/json | jq -r '.releases  | keys | last')"
   elif [[ $PRGNAM == python-jeepney ]] || [[ $PRGNAM == python-css-parser ]] || [[ $PRGNAM == rfc6555 ]] ; then
     PYNAME="${PRGNAM#"python-"}"
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://pypi.org/pypi/$PYNAME/json" | jq -r '.releases | keys | last')"
@@ -254,31 +254,21 @@ fi
     JSON="$(curl -f --header "Authorization: Bearer $GITHUB_TOKEN" -s -H "Accept: application/json" "https://api.github.com/repos/$USER/$PRGNAM/$RESOURCE?per_page=100")"
 
     if [[ $PRGNAM == dropbear ]] ; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "ltm-0.30-orig" || this.name.substring(0, 6) === "libtom" || this.name.substring(0, 4) === "LTM_" || this.name.substring(0, 4) === "LTC_" || this.name === "maemo-0.52-2") return null')"
-    elif [[ $PRGNAM == exa ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.9.0-pre") return null')"
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | startswith("DROPBEAR_")))')"
     elif [[ $PRGNAM == fwupd ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 6) === "fwupd_" || this.name === "v.tag-test.1" || this.name === "genesys-1") return null')"
-    elif [[ $PRGNAM == git-fame ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "devel" || this.name === "docker-base-layer") return null')"
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | startswith("fwupd_") | not))')"
     elif [[ $PRGNAM == noto-emoji ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name.substring(0, 4) === "v201" || this.name.substring(0, 4) === "v202") return null')"
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | startswith("v201") or startswith("v202") | not))')"
     elif [[ $PRGNAM == python-axolotl ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v0.1.6") return null')"
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name == "v0.1.6" | not))')"
     elif [[ $PRGNAM == osquery ]]; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.prerelease != true))')"
-    elif [[ $PRGNAM == ripgrep ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "ignore-0.4.5" || this.name === "ignore-0.4.6" || this.name === "grep-searcher-0.1.2") return null')"
-    elif [[ $PRGNAM == ruby-progressbar ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v1.5.1" || this.name === "v1.5.0") return null' | sed 's/releases\/v//')"
-    elif [[ $PRGNAM == unicode-display_width ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jsawk 'if (this.name === "v2.0.0.pre2" || this.name === "v2.0.0.pre1") return null')"
     fi
 
-    CURRENT="$(printf '%s\n' "$JSON" | jsawk -n "if (\$_ == 0) out(this.$FIELD)" | sed 's/^v//')"
+    CURRENT="$(printf '%s\n' "$JSON" | jq -r "first | .$FIELD" | sed 's/^v//')"
 
     if [[ $PRGNAM == appstream-glib ]] ; then
-      CURRENT="$(echo "$CURRENT" | sed -e 's/^appstream_glib_//' -e 's/_/./g')"
+      CURRENT="$(printf '%s\n' "$CURRENT" | sed -e 's/^appstream_glib_//' -e 's/_/./g')"
     elif [[ $PRGNAM == disper ]] ; then
       CURRENT="${CURRENT#disper-}"
     elif [[ $PRGNAM == dropbear ]] ; then
