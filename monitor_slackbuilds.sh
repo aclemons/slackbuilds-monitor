@@ -261,6 +261,8 @@ fi
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | startswith("fwupd_") | not))')"
     elif [[ $PRGNAM == noto-emoji ]]; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | startswith("v201") or startswith("v202") | not))')"
+    elif [[ $PRGNAM == pnpm ]]; then
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.tag_name | contains("-rc") | not))')"
     elif [[ $PRGNAM == python-axolotl ]]; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name == "v0.1.6" | not))')"
     elif [[ $PRGNAM == osquery ]]; then
