@@ -23,7 +23,7 @@ jobs:
           path: 'slackrepo-local-hints'
           show-progress: false
       - run: |
-          git clone --depth 1 git://git.slackbuilds.org/slackbuilds.git slackbuilds.org
+          git clone --depth 1 --branch user/aclemons/updates git://git.slackbuilds.org/slackbuilds.git slackbuilds.org || { rm -rf slackbuilds.org ; git clone --depth 1 git://git.slackbuilds.org/slackbuilds.git ; }
       - run: |
           GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" SLACKBUILDS_DIR="$(pwd)/slackbuilds.org" MYSLACKBUILDS_DIR="$(pwd)/slackbuilds" HINTS_DIR="$(pwd)/slackrepo-local-hints" ./.github/workflows/bin/run-monitor
       - uses: aclemons/xmpp-notifier@bceed0f7a8fff10c5ca0fb9976adfe617b5edfdd
