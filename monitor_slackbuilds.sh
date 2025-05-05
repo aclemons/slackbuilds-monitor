@@ -158,6 +158,7 @@ fi
                 docker-buildx) printf "%s\\n" "docker" ;;
                     early-ssh) printf "%s\\n" "gheja" ;;
                           exa) printf "%s\\n" "ogham" ;;
+                          eza) printf "%s\\n" "eza-community" ;;
                            fd) printf "%s\\n" "sharkdp" ;;
                     fleet-bin) printf "%s\\n" "fleetdm" ;;
                         fwupd) printf "%s\\n" "fwupd" ;;
