@@ -259,6 +259,8 @@ fi
 
     if [[ $PRGNAM == alacritty ]]; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.tag_name | contains("-rc") | not))')"
+    elif [[ $PRGNAM == buildx ]]; then
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | contains("-rc") | not))')"
     elif [[ $PRGNAM == dropbear ]] ; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | startswith("DROPBEAR_")))')"
     elif [[ $PRGNAM == fwupd ]]; then
