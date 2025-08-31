@@ -104,8 +104,10 @@ fi
   elif [[ $PRGNAM == eclipse-cpp ]] || [[ $PRGNAM == eclipse-java ]] || [[ $PRGNAM == eclipse-jee ]] || [[ $PRGNAM == eclipse-php ]] ; then
     CURRENT="$(w3m_fetch "https://www.eclipse.org/downloads/eclipse-packages/" | sed '/^Eclipse /!d' | grep Packages | sed 's/^Eclipse \(.*\) R Packages.*$/\1/;s/-//g;s/IDE //')"
 
-    if [[ $CURRENT == "202503" ]] ; then
-      CURRENT="4.35"
+    if [[ $CURRENT == "202509" ]] ; then
+      CURRENT="4.37"
+    elif [[ $CURRENT == "202506" ]] ; then
+      CURRENT="4.36"
     fi
   elif [[ $PRGNAM == emailrelay ]]; then
     CURRENT="$(w3m_fetch "https://sourceforge.net/projects/emailrelay/files/emailrelay/" | sed -n '/^     Name/,$p' | sed -n '3p' | sed 's/^[[:space:]]*//' | sed 's/\([^ ]*\).*$/\1/')"
