@@ -74,7 +74,7 @@ fi
     PRGNAM="$FILENAME"
   fi
 
-  if [[ $PRGNAM == henplus ]] || [[ $PRGNAM == vacation ]] || [[ $PRGNAM == picasa ]] || [[ $PRGNAM == sof-firmware ]] || [[ $PRGNAM == zulu-openjdk8 ]] || [[ $PRGNAM == zulu-openjdk11 ]] || [[ $PRGNAM == zulu-openjdk17 ]] || [[ $PRGNAM == zulu-openjdk21 ]] || [[ $PRGNAM == zulu-openjdk6 ]] || [[ $PRGNAM == zulu-openjdk7 ]] || [[ $PRGNAM == pyenv ]] || [[ $PRGNAM == qemu-user-static-bin ]] || [[ $PRGNAM == t-prot ]] ; then
+  if [[ $PRGNAM == henplus ]] || [[ $PRGNAM == vacation ]] || [[ $PRGNAM == picasa ]] || [[ $PRGNAM == sof-firmware ]] || [[ $PRGNAM == zulu-openjdk8 ]] || [[ $PRGNAM == zulu-openjdk11 ]] || [[ $PRGNAM == zulu-openjdk17 ]] || [[ $PRGNAM == zulu-openjdk21 ]] || [[ $PRGNAM == zulu-openjdk6 ]] || [[ $PRGNAM == zulu-openjdk7 ]] || [[ $PRGNAM == pyenv ]] || [[ $PRGNAM == qemu-user-static-bin ]] || [[ $PRGNAM == t-prot ]] || [[ $PRGNAM == zulu-openjdk25 ]] ; then
     continue
   fi
 
