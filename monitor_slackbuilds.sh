@@ -158,6 +158,7 @@ fi
                        disper) printf "%s\\n" "apeyser" ;;
                      dropbear) printf "%s\\n" "mkj" ;;
                 docker-buildx) printf "%s\\n" "docker" ;;
+                 hadolint-bin) printf "%s\\n" "hadolint" ;;
                     early-ssh) printf "%s\\n" "gheja" ;;
                           exa) printf "%s\\n" "ogham" ;;
                           eza) printf "%s\\n" "eza-community" ;;
@@ -235,6 +236,8 @@ fi
       PRGNAM="dynamodb-shell"
     elif [[ $PRGNAM == docker-buildx ]]; then
       PRGNAM="buildx"
+    elif [[ $PRGNAM == hadolint-bin ]]; then
+      PRGNAM="hadolint"
     elif [[ $PRGNAM == fleet-bin ]]; then
       PRGNAM="fleet"
     elif [[ $PRGNAM == libreadline-java ]]; then
