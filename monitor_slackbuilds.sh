@@ -210,6 +210,7 @@ fi
                       tofuenv) printf "%s\\n" "tofuutils" ;;
                         vtcol) printf "%s\\n" "phi-gamma" ;;
                        unison) printf "%s\\n" "bcpierce00" ;;
+                       zizmor) printf "%s\\n" "zizmorcore" ;;
                             *) >&2 printf "Unknown program %s\\n" "$PRGNAM" && exit 1 ;;
       esac
     )"
