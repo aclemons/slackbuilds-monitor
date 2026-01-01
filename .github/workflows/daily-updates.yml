@@ -12,16 +12,19 @@ jobs:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           show-progress: false
+          persist-credentials: false
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           repository: 'aclemons/slackbuilds'
           path: 'slackbuilds'
           show-progress: false
+          persist-credentials: false
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           repository: 'aclemons/slackrepo-local-hints'
           path: 'slackrepo-local-hints'
           show-progress: false
+          persist-credentials: false
       - run: |
           git clone --depth 1 --branch user/aclemons/updates git://git.slackbuilds.org/slackbuilds.git slackbuilds.org || { rm -rf slackbuilds.org && git clone --depth 1 git://git.slackbuilds.org/slackbuilds.git slackbuilds.org ; }
       - run: |
