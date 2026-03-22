@@ -273,7 +273,7 @@ fi
     elif [[ $PRGNAM == noto-emoji ]]; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name | startswith("v201") or startswith("v202") | not))')"
     elif [[ $PRGNAM == pnpm ]]; then
-      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.tag_name | contains("-rc") | not))')"
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.tag_name | contains("-alpha") or contains("-rc") or contains("-beta") | not))')"
     elif [[ $PRGNAM == python-axolotl ]]; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name == "v0.1.6" | not))')"
     elif [[ $PRGNAM == osquery ]]; then
