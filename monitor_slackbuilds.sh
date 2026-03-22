@@ -278,6 +278,8 @@ fi
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.name == "v0.1.6" | not))')"
     elif [[ $PRGNAM == osquery ]]; then
       JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.prerelease != true))')"
+    elif [[ $PRGNAM == terraform-ls ]]; then
+      JSON="$(printf '%s\n' "$JSON" | jq -r 'map(. | select(.tag_name | contains("-beta") | not))')"
     fi
 
     CURRENT="$(printf '%s\n' "$JSON" | jq -r "first | .$FIELD" | sed 's/^v//')"
