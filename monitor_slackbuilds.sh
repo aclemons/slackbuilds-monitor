@@ -166,6 +166,7 @@ fi
                     fleet-bin) printf "%s\\n" "fleetdm" ;;
                         fwupd) printf "%s\\n" "fwupd" ;;
                           fzf) printf "%s\\n" "junegunn" ;;
+                      ghostty) printf "%s\\n" "ghostty-org" ;;
                      git-fame) printf "%s\\n" "casperdcl" ;;
                 golangci-lint) printf "%s\\n" "golangci" ;;
                         gonzo) printf "%s\\n" "control-theory" ;;
@@ -201,6 +202,7 @@ fi
                     slackrepo) printf "%s\\n" "aclemons" ;;
               slackrepo-hints) printf "%s\\n" "aclemons" ;;
                       sslscan) printf "%s\\n" "rbsec" ;;
+                          stu) printf "%s\\n" "lusingander" ;;
           svn-all-fast-export) printf "%s\\n" "svn-all-fast-export" ;;
                  tagainijisho) printf "%s\\n" "Gnurou" ;;
                  terraform-ls) printf "%s\\n" "hashicorp" ;;
