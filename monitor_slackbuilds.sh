@@ -168,6 +168,7 @@ fi
                           fzf) printf "%s\\n" "junegunn" ;;
                      git-fame) printf "%s\\n" "casperdcl" ;;
                 golangci-lint) printf "%s\\n" "golangci" ;;
+                        gonzo) printf "%s\\n" "control-theory" ;;
                    imapfilter) printf "%s\\n" "lefcha" ;;
                         jsawk) printf "%s\\n" "micha" ;;
                   json-parser) printf "%s\\n" "json-parser" ;;
