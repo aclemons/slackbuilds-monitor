@@ -15,22 +15,29 @@ jobs:
         with:
           show-progress: false
           persist-credentials: false
+
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: 'aclemons/slackbuilds'
           path: 'slackbuilds'
+          fetch-depth: 1
           show-progress: false
           persist-credentials: false
+
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: 'aclemons/slackrepo-local-hints'
           path: 'slackrepo-local-hints'
+          fetch-depth: 1
           show-progress: false
           persist-credentials: false
+
       - run: |
           git clone --depth 1 --branch user/aclemons/updates git://git.slackbuilds.org/slackbuilds.git slackbuilds.org || { rm -rf slackbuilds.org && git clone --depth 1 git://git.slackbuilds.org/slackbuilds.git slackbuilds.org ; }
+
       - run: |
           GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" SLACKBUILDS_DIR="$(pwd)/slackbuilds.org" MYSLACKBUILDS_DIR="$(pwd)/slackbuilds" HINTS_DIR="$(pwd)/slackrepo-local-hints" ./.github/workflows/bin/run-monitor
+
       - uses: aclemons/xmpp-notifier@e734a96a9f9059962a14c4005fe809dd1332c9e2
         with:
           jid: ${{ secrets.XMPP_JID }}
