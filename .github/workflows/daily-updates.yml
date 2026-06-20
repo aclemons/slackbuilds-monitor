@@ -7,7 +7,7 @@ name: Daily Updates
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-slim
     permissions:
       contents: read
     steps:
