@@ -111,6 +111,8 @@ fi
     fi
   elif [[ $PRGNAM == emailrelay ]]; then
     CURRENT="$(w3m_fetch "https://sourceforge.net/projects/emailrelay/files/emailrelay/" | sed -n '/^     Name/,$p' | sed -n '3p' | sed 's/^[[:space:]]*//' | sed 's/\([^ ]*\).*$/\1/')"
+  elif [[ $PRGNAM == forgejo-cli ]]; then
+    CURRENT="$(curl -s -f https://codeberg.org/api/v1/repos/forgejo-contrib/forgejo-cli/tags | jq -r '.[0] | .name' | sed 's/^v//')"
   elif [[ $PRGNAM == gajim ]]; then
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/30/repository/tags" | jq -r '.[0] | .name')"
   elif [[ $PRGNAM == gitlab-cli ]] ; then
