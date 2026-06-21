@@ -100,7 +100,7 @@ fi
   fi
 
   if [[ $PRGNAM == binfmt-support ]] ; then
-    CURRENT="$(curl -f -s -H "Accept: application/json" "https://gitlab.com/api/v4/projects/22757105/repository/tags" | jq -r '.[0] | .name')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" "https://gitlab.com/api/v4/projects/22757105/repository/tags" | jq -r '.[0] | .name' | sed 's/^v//')"
   elif [[ $PRGNAM == eclipse-cpp ]] || [[ $PRGNAM == eclipse-java ]] || [[ $PRGNAM == eclipse-jee ]] || [[ $PRGNAM == eclipse-php ]] ; then
     CURRENT="$(w3m_fetch "https://www.eclipse.org/downloads/packages/" | sed '/^Eclipse /!d' | sed -n '/^Eclipse IDE.*Packages/p' | sed 's/^Eclipse \(.*\) R Packages.*$/\1/;s/-//g;s/IDE //')"
 
