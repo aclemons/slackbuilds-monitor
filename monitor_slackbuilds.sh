@@ -138,13 +138,13 @@ fi
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://pypi.org/pypi/$PYNAME/json" | jq -r '.releases | keys | last')"
   elif [[ $PRGNAM == python-nbxmpp ]]; then
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/11/repository/tags" | jq -r '.[0] | .name')"
-  elif [[ $PRGNAM == racer ]]; then
-    CURRENT="$(curl -f -s -H "Accept: application/json" "https://crates.io/api/v1/crates/racer" | jq -r '.versions | first | .num')"
   elif case "$PRGNAM" in rubygem*) true ;; *) false ;; esac; then
     GEMNAME="${PRGNAM#"rubygem-"}"
     CURRENT="$(curl -f -s "https://rubygems.org/api/v1/gems/$GEMNAME.json" | jq -r '.version')"
   elif [[ $PRGNAM == run-one ]]; then
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
+  elif [[ $PRGNAM == stfl ]]; then
+    CURRENT="$(curl -f -s -H "User-Agent: firefox" -H 'Accept: application/json' https://repology.org/api/v1/project/stfl | jq -r '.[].version' | sort -u | sort -V | grep -v r4 | grep -v bbb2404 | grep -v unstable | sed -n '$p')"
   elif [[ $PRGNAM == t-prot ]]; then
     CURRENT="$(w3m_fetch "http://www.escape.de/~tolot/mutt/t-prot/downloads/" | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
   elif [[ $PRGNAM == vuescan ]]; then
