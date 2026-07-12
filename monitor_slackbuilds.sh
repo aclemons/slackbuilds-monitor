@@ -216,7 +216,6 @@ fi
                     slackrepo) printf "%s\\n" "aclemons" ;;
               slackrepo-hints) printf "%s\\n" "aclemons" ;;
                       sslscan) printf "%s\\n" "rbsec" ;;
-                          stu) printf "%s\\n" "lusingander" ;;
           svn-all-fast-export) printf "%s\\n" "svn-all-fast-export" ;;
                  tagainijisho) printf "%s\\n" "Gnurou" ;;
                  terraform-ls) printf "%s\\n" "hashicorp" ;;
