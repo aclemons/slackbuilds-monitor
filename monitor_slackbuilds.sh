@@ -40,6 +40,7 @@ SLACKBUILDS_DIR=${SLACKBUILDS_DIR:-~/workspace/slackbuilds.org}
 MYSLACKBUILDS_DIR=${MYSLACKBUILDS_DIR:-~/workspace/slackbuilds}
 HINTS_DIR=${HINTS_DIR:-~/workspace/slackrepo-local-hints}
 MAINTAINER=${MAINTAINER:-andrew clemons}
+WITH_HASKELL=${WITH_HASKELL:-no}
 
 if [[ -z $MAINTAINER ]] ; then
  >&2 printf "maintainer?\n"
@@ -74,7 +75,11 @@ fi
     PRGNAM="$FILENAME"
   fi
 
-  if [[ $PRGNAM == henplus ]] || [[ $PRGNAM == vacation ]] || [[ $PRGNAM == picasa ]] || [[ $PRGNAM == sof-firmware ]] || [[ $PRGNAM == zulu-openjdk8 ]] || [[ $PRGNAM == zulu-openjdk11 ]] || [[ $PRGNAM == zulu-openjdk17 ]] || [[ $PRGNAM == zulu-openjdk21 ]] || [[ $PRGNAM == zulu-openjdk6 ]] || [[ $PRGNAM == zulu-openjdk7 ]] || [[ $PRGNAM == pyenv ]] || [[ $PRGNAM == qemu-user-static-bin ]] || [[ $PRGNAM == t-prot ]] || [[ $PRGNAM == zulu-openjdk25 ]] ; then
+  if [[ $PRGNAM == henplus ]] || [[ $PRGNAM == vacation ]] || [[ $PRGNAM == picasa ]] || [[ $PRGNAM == sof-firmware ]] || [[ $PRGNAM == zulu-openjdk8 ]] || [[ $PRGNAM == zulu-openjdk11 ]] || [[ $PRGNAM == zulu-openjdk17 ]] || [[ $PRGNAM == zulu-openjdk21 ]] || [[ $PRGNAM == zulu-openjdk6 ]] || [[ $PRGNAM == zulu-openjdk7 ]] || [[ $PRGNAM == pyenv ]] || [[ $PRGNAM == t-prot ]] || [[ $PRGNAM == zulu-openjdk25 ]] ; then
+    continue
+  fi
+
+  if [[ $PRGNAM == haskell-* ]] && [[ $PRGNAM != haskell-ShellCheck ]] && [[ $WITH_HASKELL != "yes" ]] ; then
     continue
   fi
 
@@ -157,11 +162,14 @@ fi
                appstream-glib) printf "%s\\n" "hughsie" ;;
                          buku) printf "%s\\n" "jarun" ;;
                      bukubrow) printf "%s\\n" "SamHH" ;;
+                   containerd) printf "%s\\n" "containerd" ;;
                            cw) printf "%s\\n" "lucagrulla" ;;
                         ddbsh) printf "%s\\n" "awslabs" ;;
                        disper) printf "%s\\n" "apeyser" ;;
                      dropbear) printf "%s\\n" "mkj" ;;
                 docker-buildx) printf "%s\\n" "docker" ;;
+                   docker-cli) printf "%s\\n" "docker" ;;
+                       docker) printf "%s\\n" "moby" ;;
                  hadolint-bin) printf "%s\\n" "hadolint" ;;
                     early-ssh) printf "%s\\n" "gheja" ;;
                           exa) printf "%s\\n" "ogham" ;;
@@ -193,13 +201,14 @@ fi
      python-mysql-replication) printf "%s\\n" "julien-duponchelle" ;;
            python-precis-i18n) printf "%s\\n" "byllyfish" ;;
           python-unicodedata2) printf "%s\\n" "fonttools" ;;
+           python2-selectors2) printf "%s\\n" "sethmlarson" ;;
                        qtpass) printf "%s\\n" "IJHack" ;;
              rbenv|ruby-build) printf "%s\\n" "rbenv" ;;
                         rtw88) printf "%s\\n" "lwfinger" ;;
                       ripgrep) printf "%s\\n" "BurntSushi" ;;
                        rlwrap) printf "%s\\n" "hanslub42" ;;
+                         runc) printf "%s\\n" "opencontainers" ;;
                        rustup) printf "%s\\n" "rust-lang" ;;
-           python2-selectors2) printf "%s\\n" "sethmlarson" ;;
                     slackroll) printf "%s\\n" "slackroll" ;;
                 slack-osquery) printf "%s\\n" "aclemons" ;;
                          skim) printf "%s\\n" "skim-rs" ;;
@@ -214,8 +223,11 @@ fi
                         tfenv) printf "%s\\n" "tfutils" ;;
                        tflint) printf "%s\\n" "terraform-linters" ;;
                       thefuck) printf "%s\\n" "nvbn" ;;
-                 ttf-mononoki) printf "%s\\n" "madmalik" ;;
+                         tini) printf "%s\\n" "krallin" ;;
                       tofuenv) printf "%s\\n" "tofuutils" ;;
+                 ttf-mononoki) printf "%s\\n" "madmalik" ;;
+                    typos-lsp) printf "%s\\n" "tekumara" ;;
+                        typos) printf "%s\\n" "crate-ci" ;;
                         vtcol) printf "%s\\n" "phi-gamma" ;;
                        unison) printf "%s\\n" "bcpierce00" ;;
                        zizmor) printf "%s\\n" "zizmorcore" ;;
@@ -225,7 +237,7 @@ fi
 
     RESOURCE="$(
       case $PRGNAM in
-        appstream-glib|disper|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "tags" ;;
+        appstream-glib|cli|disper|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "tags" ;;
                                                                                            early-ssh|kde1-*|qt1|rtw88|slack-libpurple) printf "%s\\n" "commits" ;;
                                                                                                                                                                            *) printf "%s\\n" "releases" ;;
       esac
@@ -233,7 +245,7 @@ fi
 
     FIELD="$(
       case $PRGNAM in
-        appstream-glib|disper|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "name" ;;
+        appstream-glib|cli|disper|dropbear|exa|fwupd|fzf|imapfilter|jsawk|json-parser|libreadline-java|libjcat|libxmlb|newsboat|node-xoauth2|noto-emoji|python-axolotl|python-mysql-replication|qtpass|ruby-build|rustup|sslscan|svn-all-fast-export|slackrepo*|tagainijisho|unison|vtcol|skim) printf "%s\\n" "name" ;;
                                                                                             early-ssh|kde1-*|qt1|rtw88|slack-libpurple) printf "%s\\n" "sha" ;;
                                                                                                                                                                            *) printf "%s\\n" "tag_name" ;;
       esac
@@ -245,6 +257,10 @@ fi
       PRGNAM="dynamodb-shell"
     elif [[ $PRGNAM == docker-buildx ]]; then
       PRGNAM="buildx"
+    elif [[ $PRGNAM == docker-cli ]]; then
+      PRGNAM="cli"
+    elif [[ $PRGNAM == docker ]]; then
+      PRGNAM="moby"
     elif [[ $PRGNAM == hadolint-bin ]]; then
       PRGNAM="hadolint"
     elif [[ $PRGNAM == fleet-bin ]]; then
@@ -303,6 +319,8 @@ fi
       CURRENT="git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
     elif case "$PRGNAM" in kde1-*) true ;; *) false;; esac ; then
       CURRENT="1.1.2.git$(printf "%s\\n" "$CURRENT" | sed -e 's/^\(.\{7\}\).*/\1/')"
+    elif [[ $PRGNAM == moby ]] ; then
+      CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^docker-v//')"
     elif [[ $PRGNAM == newsboat ]] ; then
       CURRENT="$(printf '%s\n' "$CURRENT" | sed 's/^r//')"
     elif [[ $PRGNAM == noto-emoji ]] ; then
