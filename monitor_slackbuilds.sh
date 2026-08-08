@@ -83,6 +83,14 @@ fi
     continue
   fi
 
+  if [[ $PRGNAM == happy ]] && [[ $WITH_HASKELL != "yes" ]] ; then
+    continue
+  fi
+
+  if [[ $PRGNAM == ghc ]] && [[ $WITH_HASKELL != "yes" ]] ; then
+    continue
+  fi
+
   # pinned to last version which supported python2.
   if [[ $PRGNAM == python2-setuptools-scm ]] || [[ $PRGNAM == python2-pkgconfig ]] ; then
     continue
