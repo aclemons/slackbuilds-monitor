@@ -171,6 +171,7 @@ fi
                          buku) printf "%s\\n" "jarun" ;;
                      bukubrow) printf "%s\\n" "SamHH" ;;
                    containerd) printf "%s\\n" "containerd" ;;
+                   css-parser) printf "%s\\n" "ebook-utils" ;;
                            cw) printf "%s\\n" "lucagrulla" ;;
                         ddbsh) printf "%s\\n" "awslabs" ;;
                        disper) printf "%s\\n" "apeyser" ;;
