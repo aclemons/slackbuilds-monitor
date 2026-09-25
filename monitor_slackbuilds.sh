@@ -157,7 +157,7 @@ fi
   elif [[ $PRGNAM == run-one ]]; then
     CURRENT="$(w3m_fetch "https://launchpad.net/run-one/+download" | sed '/^[[:digit:]\.]* release from the .* series/!d' | head -n1 | sed 's/^\([[:digit:]\.]*\) .*$/\1/')"
   elif [[ $PRGNAM == stfl ]]; then
-    CURRENT="$(curl -f -s -H "User-Agent: firefox" -H 'Accept: application/json' https://repology.org/api/v1/project/stfl | jq -r '.[].version' | sort -u | sort -V | grep -v r4 | grep -v bbb2404 | grep -v unstable | sed -n '$p')"
+    CURRENT="$(curl -f -s -H "User-Agent: firefox" -H 'Accept: application/json' https://repology.org/api/v1/project/stfl | jq -r '.[].version' | sort -u | sort -V | grep -v r4 | grep -v bbb2404 | grep -v unstable | sed -n '$p' || true)"
   elif [[ $PRGNAM == t-prot ]]; then
     CURRENT="$(w3m_fetch "http://www.escape.de/~tolot/mutt/t-prot/downloads/" | sed '/t-prot-/!d' | tail -n1 | sed 's/.*t-prot-\(.*\)\.tar\.gz.*/\1/')"
   elif [[ $PRGNAM == vuescan ]]; then
