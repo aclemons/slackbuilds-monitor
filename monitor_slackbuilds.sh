@@ -127,7 +127,7 @@ fi
   elif [[ $PRGNAM == forgejo-cli ]]; then
     CURRENT="$(curl -s -f https://codeberg.org/api/v1/repos/forgejo-contrib/forgejo-cli/tags | jq -r '.[0] | .name' | sed 's/^v//')"
   elif [[ $PRGNAM == gajim ]]; then
-    CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/30/repository/tags" | jq -r '.[0] | .name')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" "https://gitlab.com/api/v4/projects/86419190/repository/tags" | jq -r '.[0] | .name')"
   elif [[ $PRGNAM == gitlab-cli ]] ; then
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://gitlab.com/api/v4/projects/34675721/repository/tags" | jq -r '.[0] | .name' | sed 's/^v//')"
   elif [[ $PRGNAM == gopls ]]; then
@@ -150,7 +150,7 @@ fi
     PYNAME="${PRGNAM#"python-"}"
     CURRENT="$(curl -f -s -H "Accept: application/json" "https://pypi.org/pypi/$PYNAME/json" | jq -r '.releases | keys | last')"
   elif [[ $PRGNAM == python-nbxmpp ]]; then
-    CURRENT="$(curl -f -s -H "Accept: application/json" "https://dev.gajim.org/api/v4/projects/11/repository/tags" | jq -r '.[0] | .name')"
+    CURRENT="$(curl -f -s -H "Accept: application/json" "https://gitlab.com/api/v4/projects/86419220/repository/tags" | jq -r '.[0] | .name')"
   elif case "$PRGNAM" in rubygem*) true ;; *) false ;; esac; then
     GEMNAME="${PRGNAM#"rubygem-"}"
     CURRENT="$(curl -f -s "https://rubygems.org/api/v1/gems/$GEMNAME.json" | jq -r '.version')"
