@@ -228,6 +228,7 @@ fi
           svn-all-fast-export) printf "%s\\n" "svn-all-fast-export" ;;
                  tagainijisho) printf "%s\\n" "Gnurou" ;;
                  terraform-ls) printf "%s\\n" "hashicorp" ;;
+                         tenv) printf "%s\\n" "tofuutils" ;;
                         tfenv) printf "%s\\n" "tfutils" ;;
                        tflint) printf "%s\\n" "terraform-linters" ;;
                       thefuck) printf "%s\\n" "nvbn" ;;
